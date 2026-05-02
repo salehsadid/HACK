@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HACK Projects and Workshops</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body class="light-site">
+    <section class="hero-banner" style="--hero-image: url('resource/hw3.jpg');">
+        <header class="top-shell">
+            <div class="brand-block">
+                <img src="resource/hack.png" alt="HACK KUET Logo" class="brand-logo">
+                <div class="brand-copy">
+                    <p class="eyebrow">KUET Student Innovation Collective</p>
+                    <h1>Projects &amp; Workshops</h1>
+                </div>
+            </div>
+
+            <button class="menu-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="site-nav">
+                <span class="menu-icon" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </button>
+
+            <nav id="site-nav" class="main-nav" aria-label="Main navigation">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link active" href="projects-workshops.html">Projects &amp; Workshops</a>
+                <a class="nav-link" href="blog.html">Blog</a>
+                <a class="nav-link" href="index.html#about">About</a>
+                <a class="nav-link" href="index.html#events">Events</a>
+                <a class="nav-link" href="index.html#join">Join</a>
+                <a class="nav-link" href="index.html#contact">Contact</a>
+            </nav>
+        </header>
+
+        <div class="hero-content">
+            <p class="hero-script">Build Journal</p>
+            <h2 class="hero-title">PROJECTS AND WORKSHOPS PIPELINE</h2>
+            <p class="hero-desc">
+                Explore current development tracks, workshop pathways, and practical execution systems shaping HACK's
+                engineering ecosystem.
+            </p>
+            <div class="hero-actions">
+                <a href="#tracks" class="btn btn-primary">View Tracks</a>
+                <a href="index.html#join" class="btn btn-light">Join Form</a>
+            </div>
+        </div>
+    </section>
+
+    <main class="page-wrap">
+        <section id="tracks" class="panel">
+            <header class="panel-header">
+                <p class="eyebrow">Flagship Tracks</p>
+                <h2 class="panel-title">Current Engineering Projects</h2>
+            </header>
+            <div class="grid-3">
+                <article class="card">
+                    <span class="tag">Robotics</span>
+                    <h3>Maze Solver Robot</h3>
+                    <p>Adaptive pathfinding robot with sensor fusion and acceleration-aware control logic.</p>
+                    <ul>
+                        <li>Stage: Prototype v2</li>
+                        <li>Focus: Mapping accuracy</li>
+                        <li>Lead Cell: Autonomous Systems</li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <span class="tag">IoT</span>
+                    <h3>Smart Health Node</h3>
+                    <p>Wireless telemetry framework for continuous health parameter monitoring and alerting.</p>
+                    <ul>
+                        <li>Stage: Field testing</li>
+                        <li>Focus: Data reliability</li>
+                        <li>Lead Cell: Embedded Intelligence</li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <span class="tag">Automation</span>
+                    <h3>Campus Energy Controller</h3>
+                    <p>Sensor-driven automation model for efficient power management in educational labs.</p>
+                    <ul>
+                        <li>Stage: Pilot deployment</li>
+                        <li>Focus: Rule engine</li>
+                        <li>Lead Cell: Smart Infrastructure</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <section class="panel">
+            <header class="panel-header">
+                <p class="eyebrow">Workshop Tracks</p>
+                <h2 class="panel-title">Hands-on Learning Ladder</h2>
+            </header>
+            <div class="grid-2">
+                <article class="card">
+                    <h3>Beginner to Intermediate</h3>
+                    <ul>
+                        <li>Embedded foundations with Arduino and ESP32</li>
+                        <li>Sensor interface and real-time debugging labs</li>
+                        <li>PCB introduction and communication protocols</li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h3>Advanced and Competition</h3>
+                    <ul>
+                        <li>FPGA concepts and optimization strategy</li>
+                        <li>Integrated system architecture and stress testing</li>
+                        <li>Demo readiness and technical pitching methods</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <section class="panel">
+            <header class="panel-header">
+                <p class="eyebrow">Upcoming Batches</p>
+                <h2 class="panel-title">Workshop Calendar</h2>
+            </header>
+            <div class="grid-3">
+                <article class="card">
+                    <span class="tag">Batch A</span>
+                    <h3>Embedded Starter Camp</h3>
+                    <p>Electronics basics, coding labs, and hardware safety for first-year members.</p>
+                </article>
+                <article class="card">
+                    <span class="tag">Batch B</span>
+                    <h3>Robotics Performance Lab</h3>
+                    <p>Motor tuning, trajectory corrections, and speed-stability balancing.</p>
+                </article>
+                <article class="card">
+                    <span class="tag">Batch C</span>
+                    <h3>System Integration Studio</h3>
+                    <p>Build modular hardware systems from sensing to final dashboard output.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="panel cta-panel">
+            <div>
+                <p class="eyebrow">Team Entry</p>
+                <h2 class="panel-title">Want To Work On A Real Build?</h2>
+                <p>Apply for your preferred project track and get matched with a guided team workflow.</p>
+            </div>
+            <a href="index.html#join" class="btn btn-outline">Apply For Track</a>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="social-links" aria-label="HACK social links">
+            <a class="social-logo" href="https://www.facebook.com/profile.php?id=100088262984928" target="_blank" rel="noopener noreferrer" aria-label="HACK Facebook Page">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M13.6 8.2h2V5.1c-.9-.1-1.8-.1-2.7-.1-2.7 0-4.6 1.6-4.6 4.7v2.6H5.2v3.4h3.1V23h3.8v-7.3h3l.5-3.4h-3.5V10c0-1 .3-1.8 1.5-1.8z" />
+                </svg>
+                <span>Facebook Page</span>
+            </a>
+            <a class="social-logo" href="https://www.facebook.com/groups/hack.kuet" target="_blank" rel="noopener noreferrer" aria-label="HACK Facebook Community">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M16 11c1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3 1.3 3 3 3zm-8 0c1.7 0 3-1.3 3-3S9.7 5 8 5 5 6.3 5 8s1.3 3 3 3zm0 2c-2.3 0-6 1.2-6 3.5V19h12v-2.5C14 14.2 10.3 13 8 13zm8 0c-.3 0-.7 0-1.1.1 1.2.9 2.1 2 2.1 3.4V19h7v-2.5c0-2.3-3.7-3.5-6-3.5z" />
+                </svg>
+                <span>Community Group</span>
+            </a>
+        </div>
+        <p class="footer-note">&copy; 2026 Hardware Acceleration Club of KUET (HACK). All rights reserved.</p>
+    </footer>
+</body>
+</html>
