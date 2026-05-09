@@ -55,6 +55,7 @@
         const status = joinForm.querySelector('[data-form-status]');
         const messageField = joinForm.querySelector('#message');
         const counter = joinForm.querySelector('[data-char-counter]');
+        const isAspNetForm = Boolean(joinForm.querySelector('input[name="__VIEWSTATE"]'));
 
         const updateCounter = function () {
             if (!messageField || !counter) {
@@ -79,17 +80,19 @@
             updateCounter();
         }
 
-        joinForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-            if (!joinForm.checkValidity()) {
-                joinForm.reportValidity();
-                setStatus('Please fill in all required fields correctly.', true);
-                return;
-            }
+        if (!isAspNetForm) {
+            joinForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                if (!joinForm.checkValidity()) {
+                    joinForm.reportValidity();
+                    setStatus('Please fill in all required fields correctly.', true);
+                    return;
+                }
 
-            setStatus('Application submitted successfully. We will contact you soon.', false);
-            joinForm.reset();
-            updateCounter();
-        });
+                setStatus('Application submitted successfully. We will contact you soon.', false);
+                joinForm.reset();
+                updateCounter();
+            });
+        }
     }
 })();
