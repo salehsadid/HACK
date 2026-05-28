@@ -3,13 +3,6 @@ using System.Collections.Generic;
 
 namespace HACK.WebForms
 {
-    public class BlogPost
-    {
-        public string Category { get; set; }
-        public string Title { get; set; }
-        public string Summary { get; set; }
-    }
-
     public class RegistrationEntry
     {
         public string FullName { get; set; }
@@ -22,55 +15,52 @@ namespace HACK.WebForms
         public DateTime SubmittedAt { get; set; }
     }
 
+    public class ClubContentItem
+    {
+        public string ContentType { get; set; }
+        public string Title { get; set; }
+        public string Subtitle { get; set; }
+        public string Body { get; set; }
+        public string ImageUrl { get; set; }
+        public string Meta { get; set; }
+        public int DisplayOrder { get; set; }
+        public bool IsActive { get; set; }
+    }
+
+    public class BlogPost
+    {
+        public string Category { get; set; }
+        public string Title { get; set; }
+        public string Summary { get; set; }
+    }
+
     public static class BlogRepository
     {
         private static readonly List<BlogPost> Posts = new List<BlogPost>
         {
             new BlogPost
             {
-                Category = "Workshop Recap",
-                Title = "ESP32 Bootcamp: Zero To Live Dashboard",
-                Summary = "Teams deployed sensor dashboards and practiced telemetry architecture in one weekend."
+                Category = "Workshop",
+                Title = "ESP32 sprint lab notes",
+                Summary = "Board bring-up, sensor reading, MQTT telemetry, and field debugging lessons from the lab."
             },
             new BlogPost
             {
                 Category = "Build Log",
-                Title = "Line Follower Tuning Notes",
-                Summary = "PID balancing results, track test metrics, and battery-performance comparisons."
+                Title = "Rover platform control loop",
+                Summary = "How the robotics team tuned motor response, wiring reliability, and quick service access."
             },
             new BlogPost
             {
-                Category = "Team Culture",
-                Title = "Inside HACK Demo Night",
-                Summary = "Mentors reviewed prototypes and teams received technical feedback for next sprint goals."
+                Category = "Digital Design",
+                Title = "First HDL timing review",
+                Summary = "A practical walkthrough of waveform inspection, timing constraints, and FPGA lab habits."
             }
         };
 
         public static IReadOnlyList<BlogPost> GetPosts()
         {
             return Posts;
-        }
-    }
-
-    public static class RegistrationStore
-    {
-        private static readonly object SyncRoot = new object();
-        private static readonly List<RegistrationEntry> Registrations = new List<RegistrationEntry>();
-
-        public static void Add(RegistrationEntry entry)
-        {
-            lock (SyncRoot)
-            {
-                Registrations.Add(entry);
-            }
-        }
-
-        public static IReadOnlyList<RegistrationEntry> GetAll()
-        {
-            lock (SyncRoot)
-            {
-                return Registrations.AsReadOnly();
-            }
         }
     }
 }

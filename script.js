@@ -1,98 +1,61 @@
 (function () {
-    const header = document.querySelector('.top-shell');
-    if (header) {
-        const onScroll = function () {
-            header.classList.toggle('scrolled', window.scrollY > 10);
-        };
-        onScroll();
-        window.addEventListener('scroll', onScroll, { passive: true });
+    var root = document.documentElement;
+    var savedTheme = localStorage.getItem("hack-theme");
+
+    if (savedTheme === "dark" || savedTheme === "light") {
+        root.setAttribute("data-theme", savedTheme);
+    } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        root.setAttribute("data-theme", "dark");
     }
 
-    document.querySelectorAll('.top-shell').forEach(function (shell) {
-        const menuButton = shell.querySelector('.menu-toggle');
-        const nav = shell.querySelector('.main-nav');
+    document.querySelectorAll("[data-theme-toggle]").forEach(function (button) {
+        button.addEventListener("click", function () {
+            var nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            root.setAttribute("data-theme", nextTheme);
+            localStorage.setItem("hack-theme", nextTheme);
+        });
+    });
+
+    document.querySelectorAll(".site-header").forEach(function (header) {
+        var menuButton = header.querySelector(".menu-toggle");
+        var nav = header.querySelector(".main-nav");
 
         if (!menuButton || !nav) {
             return;
         }
 
-        const closeMenu = function () {
-            shell.classList.remove('menu-open');
-            menuButton.classList.remove('is-open');
-            menuButton.setAttribute('aria-expanded', 'false');
+        var closeMenu = function () {
+            header.classList.remove("menu-open");
+            menuButton.setAttribute("aria-expanded", "false");
         };
 
-        menuButton.addEventListener('click', function () {
-            const willOpen = !shell.classList.contains('menu-open');
-            shell.classList.toggle('menu-open', willOpen);
-            menuButton.classList.toggle('is-open', willOpen);
-            menuButton.setAttribute('aria-expanded', String(willOpen));
+        menuButton.addEventListener("click", function () {
+            var open = !header.classList.contains("menu-open");
+            header.classList.toggle("menu-open", open);
+            menuButton.setAttribute("aria-expanded", String(open));
         });
 
-        nav.querySelectorAll('a').forEach(function (link) {
-            link.addEventListener('click', function () {
-                if (window.matchMedia('(max-width: 760px)').matches) {
-                    closeMenu();
-                }
-            });
+        nav.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", closeMenu);
         });
 
-        window.addEventListener('resize', function () {
-            if (window.innerWidth > 760) {
-                closeMenu();
-            }
-        });
-
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape') {
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
                 closeMenu();
             }
         });
     });
 
-    const joinForm = document.querySelector('#join-form');
-    if (joinForm) {
-        const status = joinForm.querySelector('[data-form-status]');
-        const messageField = joinForm.querySelector('#message');
-        const counter = joinForm.querySelector('[data-char-counter]');
-        const isAspNetForm = Boolean(joinForm.querySelector('input[name="__VIEWSTATE"]'));
+    var messageField = document.querySelector("#message");
+    var counter = document.querySelector("[data-char-counter]");
 
-        const updateCounter = function () {
-            if (!messageField || !counter) {
-                return;
-            }
-            const length = messageField.value.trim().length;
-            counter.textContent = length + ' / 300';
+    if (messageField && counter) {
+        var updateCounter = function () {
+            var max = messageField.getAttribute("maxlength") || "600";
+            counter.textContent = messageField.value.length + " / " + max;
         };
 
-        const setStatus = function (text, isError) {
-            if (!status) {
-                return;
-            }
-            status.textContent = text;
-            status.classList.toggle('error', Boolean(isError));
-            status.classList.toggle('success', !isError && text.length > 0);
-        };
-
-        if (messageField) {
-            messageField.setAttribute('maxlength', '300');
-            messageField.addEventListener('input', updateCounter);
-            updateCounter();
-        }
-
-        if (!isAspNetForm) {
-            joinForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-                if (!joinForm.checkValidity()) {
-                    joinForm.reportValidity();
-                    setStatus('Please fill in all required fields correctly.', true);
-                    return;
-                }
-
-                setStatus('Application submitted successfully. We will contact you soon.', false);
-                joinForm.reset();
-                updateCounter();
-            });
-        }
+        messageField.addEventListener("input", updateCounter);
+        updateCounter();
     }
 })();

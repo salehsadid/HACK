@@ -1,1 +1,1 @@
-<%@ Application Language="C#" Inherits="HACK.WebForms.Global" %>
+<%@ Application Language="C#" CodeFile="Global.asax.cs" Inherits="Global" %>

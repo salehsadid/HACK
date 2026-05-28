@@ -1,7 +1,15 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\.github",
+    "\\Admin",
+    "\\App_Code",
+    "\\bin",
+    "\\bin\\Debug",
+    "\\bin\\Debug\\Publish",
+    "\\database",
+    "\\WebFormsHACK"
   ],
-  "SelectedNode": "\\Home.aspx",
+  "SelectedNode": "\\.github",
   "PreviewInSolutionExplorer": false
 }

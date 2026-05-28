@@ -1,0 +1,61 @@
+CREATE DATABASE HACKClub;
+GO
+
+USE HACKClub;
+GO
+
+CREATE TABLE AdminUsers (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Username NVARCHAR(50) NOT NULL UNIQUE,
+    PasswordHash VARBINARY(32) NOT NULL
+);
+GO
+
+INSERT INTO AdminUsers (Username, PasswordHash)
+VALUES ('admin', HASHBYTES('SHA2_256', CONVERT(VARCHAR(4000), 'admin')));
+GO
+
+CREATE TABLE Members (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    FullName NVARCHAR(120) NOT NULL,
+    Email NVARCHAR(120) NOT NULL,
+    Phone NVARCHAR(30) NOT NULL,
+    Department NVARCHAR(80) NOT NULL,
+    Batch NVARCHAR(30) NOT NULL,
+    InterestArea NVARCHAR(80) NOT NULL,
+    Motivation NVARCHAR(600) NOT NULL,
+    SubmittedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+GO
+
+CREATE TABLE Applicants (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    FullName NVARCHAR(120) NOT NULL,
+    Email NVARCHAR(120) NOT NULL,
+    Phone NVARCHAR(30) NOT NULL,
+    Department NVARCHAR(80) NOT NULL,
+    Batch NVARCHAR(30) NOT NULL,
+    InterestArea NVARCHAR(80) NOT NULL,
+    Motivation NVARCHAR(600) NOT NULL,
+    SubmittedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+GO
+
+CREATE TABLE ClubContent (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    ContentType NVARCHAR(30) NOT NULL,
+    Title NVARCHAR(160) NOT NULL,
+    Subtitle NVARCHAR(220) NULL,
+    Body NVARCHAR(900) NULL,
+    ImageUrl NVARCHAR(260) NULL,
+    Meta NVARCHAR(120) NULL,
+    DisplayOrder INT NOT NULL DEFAULT 0,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+GO
+
+CREATE INDEX IX_Members_SubmittedAt ON Members (SubmittedAt DESC);
+CREATE INDEX IX_Applicants_SubmittedAt ON Applicants (SubmittedAt DESC);
+CREATE INDEX IX_ClubContent_TypeOrder ON ClubContent (ContentType, DisplayOrder, CreatedAt DESC);
+GO

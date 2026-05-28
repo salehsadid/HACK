@@ -27,11 +27,22 @@ namespace HACK.WebForms
         private T GetMainContentControl<T>(string id) where T : Control
         {
             var contentPlaceHolder = Master.FindControl("MainContent") as ContentPlaceHolder;
-            return contentPlaceHolder?.FindControl(id) as T;
+            return contentPlaceHolder == null ? null : contentPlaceHolder.FindControl(id) as T;
         }
 
-        private Repeater PostsRepeater => GetMainContentControl<Repeater>("postsRepeater");
-        private Literal FeaturedTitle => GetMainContentControl<Literal>("featuredTitle");
-        private Literal FeaturedSummary => GetMainContentControl<Literal>("featuredSummary");
+        private Repeater PostsRepeater
+        {
+            get { return GetMainContentControl<Repeater>("postsRepeater"); }
+        }
+
+        private Literal FeaturedTitle
+        {
+            get { return GetMainContentControl<Literal>("featuredTitle"); }
+        }
+
+        private Literal FeaturedSummary
+        {
+            get { return GetMainContentControl<Literal>("featuredSummary"); }
+        }
     }
 }

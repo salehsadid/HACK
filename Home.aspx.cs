@@ -1,64 +1,28 @@
 using System;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
-namespace HACK.WebForms
+public partial class Home : Page
 {
-    public partial class Home : Page
+    protected void Page_Load(object sender, EventArgs e)
     {
-        protected void SubmitApplication_Click(object sender, EventArgs e)
+        if (!IsPostBack)
         {
-            Page.Validate();
-
-            if (!Page.IsValid)
-            {
-                FormStatus.Text = "Please correct the highlighted fields and try again.";
-                FormStatus.CssClass = "form-status error";
-                return;
-            }
-
-            RegistrationStore.Add(new RegistrationEntry
-            {
-                FullName = FullNameBox.Text.Trim(),
-                Email = EmailBox.Text.Trim(),
-                Phone = PhoneBox.Text.Trim(),
-                Department = DepartmentBox.Text.Trim(),
-                Batch = BatchBox.Text.Trim(),
-                InterestArea = InterestBox.SelectedValue,
-                Motivation = MessageBox.Text.Trim(),
-                SubmittedAt = DateTime.UtcNow
-            });
-
-            FormStatus.Text = "Application submitted successfully. We will contact you soon.";
-            FormStatus.CssClass = "form-status success";
-
-            ClearForm();
+            BindHomeContent();
         }
+    }
 
-        private void ClearForm()
-        {
-            FullNameBox.Text = string.Empty;
-            EmailBox.Text = string.Empty;
-            PhoneBox.Text = string.Empty;
-            DepartmentBox.Text = string.Empty;
-            BatchBox.Text = string.Empty;
-            InterestBox.ClearSelection();
-            MessageBox.Text = string.Empty;
-        }
+    private void BindHomeContent()
+    {
+        noticesRepeater.DataSource = HACK.WebForms.HackRepository.GetContent("notice");
+        noticesRepeater.DataBind();
 
-        private T GetMainContentControl<T>(string id) where T : Control
-        {
-            var contentPlaceHolder = Master.FindControl("MainContent") as ContentPlaceHolder;
-            return contentPlaceHolder?.FindControl(id) as T;
-        }
+        achievementsRepeater.DataSource = HACK.WebForms.HackRepository.GetContent("achievement");
+        achievementsRepeater.DataBind();
 
-        private TextBox FullNameBox => GetMainContentControl<TextBox>("fullName");
-        private TextBox EmailBox => GetMainContentControl<TextBox>("email");
-        private TextBox PhoneBox => GetMainContentControl<TextBox>("phone");
-        private TextBox DepartmentBox => GetMainContentControl<TextBox>("department");
-        private TextBox BatchBox => GetMainContentControl<TextBox>("batch");
-        private DropDownList InterestBox => GetMainContentControl<DropDownList>("interest");
-        private TextBox MessageBox => GetMainContentControl<TextBox>("message");
-        private Label FormStatus => GetMainContentControl<Label>("formStatus");
+        projectsRepeater.DataSource = HACK.WebForms.HackRepository.GetContent("project");
+        projectsRepeater.DataBind();
+
+        galleryRepeater.DataSource = HACK.WebForms.HackRepository.GetContent("gallery");
+        galleryRepeater.DataBind();
     }
 }

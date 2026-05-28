@@ -1,164 +1,146 @@
-<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Site.master" CodeBehind="Home.aspx.cs" Inherits="HACK.WebForms.Home" Title="HACK KUET | Hardware Acceleration Club" %>
+<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Site.master" CodeFile="Home.aspx.cs" Inherits="Home" Title="HACK KUET | Hardware Acceleration Club" %>
 <asp:Content ID="HomeContent" ContentPlaceHolderID="MainContent" runat="server">
-    <section class="hero-banner" style="--hero-image: url('resource/Hardware.webp');">
-        <div class="hero-content">
-            <p class="hero-script">The Heart</p>
-            <h2 class="hero-title">OF KUET HARDWARE COMMUNITY</h2>
-            <p class="hero-desc">
-                HACK is where ambitious students design electronics, build robots, and launch real-world embedded
-                systems with mentorship, technical standards, and competition-level discipline.
-            </p>
-            <div class="hero-actions">
-                <a href="#join" class="btn btn-primary">Join The Club</a>
-                <a href="projects-workshops.html" class="btn btn-light">Explore Projects</a>
+    <main>
+        <section class="hero">
+            <div class="hero-media">
+                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&amp;fit=crop&amp;w=1800&amp;q=85" alt="Hardware lab bench with electronics components" />
             </div>
-        </div>
-    </section>
+            <div class="hero-inner">
+                <p class="eyebrow">KUET Hardware Community</p>
+                <h1>Build real hardware, from bare board to working system.</h1>
+                <p class="hero-copy">HACK is a student engineering club for embedded systems, robotics, FPGA, IoT, automation, PCB assembly, and competition-ready prototyping.</p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="Register.aspx">Apply for Membership</a>
+                    <a class="btn btn-ghost" href="#projects">View Projects</a>
+                </div>
+                <div class="metric-row" aria-label="Club statistics">
+                    <div><strong>120+</strong><span>builders</span></div>
+                    <div><strong>35+</strong><span>labs yearly</span></div>
+                    <div><strong>18</strong><span>awards</span></div>
+                    <div><strong>9</strong><span>active teams</span></div>
+                </div>
+            </div>
+        </section>
 
-    <main class="page-wrap">
-        <section class="panel">
-            <header class="panel-header">
-                <p class="eyebrow">Club Snapshot</p>
-                <h2 class="panel-title">Premium Experience For Hardware Builders</h2>
-            </header>
-            <div class="info-strip">
-                <article class="card">
-                    <p class="value">120+</p>
-                    <p class="label">Active members</p>
+        <section id="about" class="section two-column">
+            <div>
+                <p class="eyebrow">What We Do</p>
+                <h2>Hardware engineering with a product mindset.</h2>
+            </div>
+            <div class="feature-grid">
+                <article>
+                    <span>01</span>
+                    <h3>Embedded Systems</h3>
+                    <p>Firmware, board bring-up, sensors, communication protocols, telemetry, and debugging discipline.</p>
                 </article>
-                <article class="card">
-                    <p class="value">35+</p>
-                    <p class="label">Workshops each year</p>
+                <article>
+                    <span>02</span>
+                    <h3>Robotics</h3>
+                    <p>Motor control, chassis design, perception, autonomous navigation, and competition practice.</p>
                 </article>
-                <article class="card">
-                    <p class="value">18</p>
-                    <p class="label">Competition awards</p>
+                <article>
+                    <span>03</span>
+                    <h3>Digital Design</h3>
+                    <p>FPGA workflows, HDL, timing, signal processing, and hardware acceleration experiments.</p>
                 </article>
-                <article class="card">
-                    <p class="value">9</p>
-                    <p class="label">Running project teams</p>
+                <article>
+                    <span>04</span>
+                    <h3>Fabrication</h3>
+                    <p>PCB layout, soldering, mechanical prototyping, enclosure review, and reliable assembly habits.</p>
                 </article>
             </div>
         </section>
 
-        <section id="about" class="panel">
-            <header class="panel-header">
-                <p class="eyebrow">About HACK</p>
-                <h2 class="panel-title">Build Skills, Build Teams, Build Impact</h2>
-            </header>
-            <div class="grid-3">
-                <article class="card">
-                    <h3>Mission</h3>
-                    <p>Enable KUET students to master practical embedded engineering through guided project execution.</p>
-                </article>
-                <article class="card">
-                    <h3>Vision</h3>
-                    <p>Create Bangladesh's most inspiring student ecosystem for robotics, acceleration, and IoT.</p>
-                </article>
-                <article class="card">
-                    <h3>Core Domains</h3>
-                    <ul>
-                        <li>Embedded Systems</li>
-                        <li>Robotics and Control</li>
-                        <li>FPGA and HDL</li>
-                        <li>Automation and IoT</li>
-                    </ul>
-                </article>
+        <section id="notices" class="section">
+            <div class="section-head">
+                <p class="eyebrow">Notices</p>
+                <h2>Club Updates</h2>
+            </div>
+            <div class="notice-list">
+                <asp:Repeater ID="noticesRepeater" runat="server">
+                    <ItemTemplate>
+                        <article class="notice-item">
+                            <span><%# Eval("Meta") %></span>
+                            <div>
+                                <h3><%# Eval("Title") %></h3>
+                                <p><%# Eval("Body") %></p>
+                            </div>
+                        </article>
+                    </ItemTemplate>
+                </asp:Repeater>
             </div>
         </section>
 
-        <section id="events" class="panel">
-            <header class="panel-header">
-                <p class="eyebrow">Events</p>
-                <h2 class="panel-title">Upcoming Learning Flow</h2>
-            </header>
-            <div class="grid-3">
-                <article class="card">
-                    <span class="tag">May 2026</span>
-                    <h3>ESP32 Sprint Camp</h3>
-                    <p>Hands-on firmware and cloud integration sessions for smart sensor networks.</p>
-                </article>
-                <article class="card">
-                    <span class="tag">June 2026</span>
-                    <h3>Autonomous Robot Lab</h3>
-                    <p>Performance trials on obstacle response, lane logic, and tuning strategy.</p>
-                </article>
-                <article class="card">
-                    <span class="tag">July 2026</span>
-                    <h3>Demo &amp; Showcase Night</h3>
-                    <p>Teams pitch prototypes to mentors, alumni, and potential collaborators.</p>
-                </article>
+        <section id="achievements" class="section">
+            <div class="section-head">
+                <p class="eyebrow">Achievements</p>
+                <h2>Proof From The Workbench</h2>
+            </div>
+            <div class="card-grid">
+                <asp:Repeater ID="achievementsRepeater" runat="server">
+                    <ItemTemplate>
+                        <article class="content-card">
+                            <img src="<%# Eval("ImageUrl") %>" alt="<%# Eval("Title") %>" />
+                            <div>
+                                <span class="pill"><%# Eval("Meta") %></span>
+                                <h3><%# Eval("Title") %></h3>
+                                <p><%# Eval("Body") %></p>
+                            </div>
+                        </article>
+                    </ItemTemplate>
+                </asp:Repeater>
             </div>
         </section>
 
-        <section id="join" class="panel form-panel join-panel">
-            <header class="panel-header">
-                <p class="eyebrow">Join Us</p>
-                <h2 class="panel-title">Join HACK By Filling This Form</h2>
-                <p>Registration includes orientation, track selection, project assignment, and mentor onboarding.</p>
-            </header>
-            <div class="form-grid">
-                <div class="form-field">
-                    <label for="fullName">Full Name</label>
-                    <asp:TextBox ID="fullName" runat="server" ClientIDMode="Static" placeholder="Your full name" />
-                    <asp:RequiredFieldValidator ID="rfvFullName" runat="server" ControlToValidate="fullName" ErrorMessage="Full name is required." CssClass="form-status error" Display="Dynamic" />
-                </div>
-                <div class="form-field">
-                    <label for="email">Email</label>
-                    <asp:TextBox ID="email" runat="server" ClientIDMode="Static" TextMode="Email" placeholder="you@example.com" />
-                    <asp:RequiredFieldValidator ID="rfvEmail" runat="server" ControlToValidate="email" ErrorMessage="Email is required." CssClass="form-status error" Display="Dynamic" />
-                    <asp:RegularExpressionValidator ID="revEmail" runat="server" ControlToValidate="email" ErrorMessage="Enter a valid email address." ValidationExpression="^[^\s@]+@[^\s@]+\.[^\s@]+$" CssClass="form-status error" Display="Dynamic" />
-                </div>
-                <div class="form-field">
-                    <label for="phone">Phone</label>
-                    <asp:TextBox ID="phone" runat="server" ClientIDMode="Static" placeholder="+8801XXXXXXXXX" />
-                    <asp:RequiredFieldValidator ID="rfvPhone" runat="server" ControlToValidate="phone" ErrorMessage="Phone number is required." CssClass="form-status error" Display="Dynamic" />
-                    <asp:RegularExpressionValidator ID="revPhone" runat="server" ControlToValidate="phone" ErrorMessage="Use a valid phone number format." ValidationExpression="^[0-9+\-\s]{7,20}$" CssClass="form-status error" Display="Dynamic" />
-                </div>
-                <div class="form-field">
-                    <label for="department">Department</label>
-                    <asp:TextBox ID="department" runat="server" ClientIDMode="Static" placeholder="EEE / CSE / ME / Others" />
-                    <asp:RequiredFieldValidator ID="rfvDepartment" runat="server" ControlToValidate="department" ErrorMessage="Department is required." CssClass="form-status error" Display="Dynamic" />
-                </div>
-                <div class="form-field">
-                    <label for="batch">Batch / Session</label>
-                    <asp:TextBox ID="batch" runat="server" ClientIDMode="Static" placeholder="2023-24" />
-                    <asp:RequiredFieldValidator ID="rfvBatch" runat="server" ControlToValidate="batch" ErrorMessage="Batch/session is required." CssClass="form-status error" Display="Dynamic" />
-                </div>
-                <div class="form-field">
-                    <label for="interest">Interest Area</label>
-                    <asp:DropDownList ID="interest" runat="server" ClientIDMode="Static">
-                        <asp:ListItem Text="Select area" Value="" />
-                        <asp:ListItem Text="Embedded Systems" Value="embedded" />
-                        <asp:ListItem Text="Robotics and Control" Value="robotics" />
-                        <asp:ListItem Text="IoT and Automation" Value="iot" />
-                        <asp:ListItem Text="FPGA and HDL" Value="fpga" />
-                    </asp:DropDownList>
-                    <asp:RequiredFieldValidator ID="rfvInterest" runat="server" ControlToValidate="interest" InitialValue="" ErrorMessage="Select an interest area." CssClass="form-status error" Display="Dynamic" />
-                </div>
-                <div class="form-field full">
-                    <label for="message">Why Do You Want To Join?</label>
-                    <asp:TextBox ID="message" runat="server" ClientIDMode="Static" TextMode="MultiLine" MaxLength="300" placeholder="Write a short motivation" />
-                    <asp:RequiredFieldValidator ID="rfvMessage" runat="server" ControlToValidate="message" ErrorMessage="Please write a short motivation." CssClass="form-status error" Display="Dynamic" />
-                    <p class="char-counter" data-char-counter>0 / 300</p>
-                </div>
+        <section id="projects" class="section dark-band">
+            <div class="section-head">
+                <p class="eyebrow">Projects</p>
+                <h2>Current Build Tracks</h2>
             </div>
-            <div class="form-actions">
-                <asp:Button ID="submitApplication" runat="server" CssClass="btn btn-primary" Text="Submit Application" OnClick="SubmitApplication_Click" />
+            <div class="card-grid">
+                <asp:Repeater ID="projectsRepeater" runat="server">
+                    <ItemTemplate>
+                        <article class="content-card">
+                            <img src="<%# Eval("ImageUrl") %>" alt="<%# Eval("Title") %>" />
+                            <div>
+                                <span class="pill"><%# Eval("Meta") %></span>
+                                <h3><%# Eval("Title") %></h3>
+                                <p><%# Eval("Body") %></p>
+                            </div>
+                        </article>
+                    </ItemTemplate>
+                </asp:Repeater>
             </div>
-            <asp:Label ID="formStatus" runat="server" CssClass="form-status" EnableViewState="false" />
         </section>
 
-        <section id="contact" class="panel">
-            <header class="panel-header">
-                <p class="eyebrow">Contact</p>
-                <h2 class="panel-title">Connect With HACK KUET</h2>
-            </header>
-            <div class="contact-grid">
-                <p><strong>Location:</strong> KUET Campus, Khulna</p>
-                <p><strong>Email:</strong> hack@kuet.ac.bd</p>
-                <p><strong>Phone:</strong> +880-1XXX-XXXXXX</p>
-                <p><strong>Office Hours:</strong> Sunday-Thursday, 3:00 PM to 8:00 PM</p>
+        <section id="gallery" class="section">
+            <div class="section-head">
+                <p class="eyebrow">Gallery</p>
+                <h2>Inside The Lab</h2>
+            </div>
+            <div class="gallery-grid">
+                <asp:Repeater ID="galleryRepeater" runat="server">
+                    <ItemTemplate>
+                        <figure>
+                            <img src="<%# Eval("ImageUrl") %>" alt="<%# Eval("Title") %>" />
+                            <figcaption>
+                                <strong><%# Eval("Title") %></strong>
+                                <span><%# Eval("Subtitle") %></span>
+                            </figcaption>
+                        </figure>
+                    </ItemTemplate>
+                </asp:Repeater>
+            </div>
+        </section>
+
+        <section id="contact" class="section contact-band">
+            <div>
+                <p class="eyebrow">Join The Floor</p>
+                <h2>Ready to work on hardware that has to survive real testing?</h2>
+            </div>
+            <div class="contact-actions">
+                <a class="btn btn-primary" href="Register.aspx">Open Registration</a>
+                <p><strong>Location:</strong> KUET Campus, Khulna<br /><strong>Email:</strong> hack@kuet.ac.bd</p>
             </div>
         </section>
     </main>

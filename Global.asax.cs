@@ -1,12 +1,10 @@
 using System;
+using System.Web.UI;
 
-namespace HACK.WebForms
+public partial class Global : System.Web.HttpApplication
 {
-    public class Global : System.Web.HttpApplication
+    protected void Application_Start(object sender, EventArgs e)
     {
-        protected void Application_Start(object sender, EventArgs e)
-        {
-            // Reserved for application-wide startup logic.
-        }
+        ValidationSettings.UnobtrusiveValidationMode = UnobtrusiveValidationMode.None;
     }
 }

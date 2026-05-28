@@ -8,7 +8,7 @@ namespace HACK.WebForms
     {
         protected void SubmitApplication_Click(object sender, EventArgs e)
         {
-            Page.Validate();
+            Page.Validate("Register");
 
             if (!Page.IsValid)
             {
@@ -17,22 +17,30 @@ namespace HACK.WebForms
                 return;
             }
 
-            RegistrationStore.Add(new RegistrationEntry
+            try
             {
-                FullName = FullNameBox.Text.Trim(),
-                Email = EmailBox.Text.Trim(),
-                Phone = PhoneBox.Text.Trim(),
-                Department = DepartmentBox.Text.Trim(),
-                Batch = BatchBox.Text.Trim(),
-                InterestArea = InterestBox.SelectedValue,
-                Motivation = MessageBox.Text.Trim(),
-                SubmittedAt = DateTime.UtcNow
-            });
+                HackRepository.InsertApplicant(new RegistrationEntry
+                {
+                    FullName = FullNameBox.Text.Trim(),
+                    Email = EmailBox.Text.Trim(),
+                    Phone = PhoneBox.Text.Trim(),
+                    Department = DepartmentBox.Text.Trim(),
+                    Batch = BatchBox.Text.Trim(),
+                    InterestArea = InterestBox.SelectedValue,
+                    Motivation = MessageBox.Text.Trim(),
+                    SubmittedAt = DateTime.UtcNow
+                });
 
-            FormStatus.Text = "Application submitted successfully. We will contact you soon.";
-            FormStatus.CssClass = "form-status success";
+                FormStatus.Text = "Application submitted successfully. An admin will review it before adding you as a member.";
+                FormStatus.CssClass = "form-status success";
 
-            ClearForm();
+                ClearForm();
+            }
+            catch
+            {
+                FormStatus.Text = "Registration failed. Please try again later.";
+                FormStatus.CssClass = "form-status error";
+            }
         }
 
         private void ClearForm()
@@ -49,16 +57,47 @@ namespace HACK.WebForms
         private T GetMainContentControl<T>(string id) where T : Control
         {
             var contentPlaceHolder = Master.FindControl("MainContent") as ContentPlaceHolder;
-            return contentPlaceHolder?.FindControl(id) as T;
+            return contentPlaceHolder == null ? null : contentPlaceHolder.FindControl(id) as T;
         }
 
-        private TextBox FullNameBox => GetMainContentControl<TextBox>("fullName");
-        private TextBox EmailBox => GetMainContentControl<TextBox>("email");
-        private TextBox PhoneBox => GetMainContentControl<TextBox>("phone");
-        private TextBox DepartmentBox => GetMainContentControl<TextBox>("department");
-        private TextBox BatchBox => GetMainContentControl<TextBox>("batch");
-        private DropDownList InterestBox => GetMainContentControl<DropDownList>("interest");
-        private TextBox MessageBox => GetMainContentControl<TextBox>("message");
-        private Label FormStatus => GetMainContentControl<Label>("formStatus");
+        private TextBox FullNameBox
+        {
+            get { return GetMainContentControl<TextBox>("fullName"); }
+        }
+
+        private TextBox EmailBox
+        {
+            get { return GetMainContentControl<TextBox>("email"); }
+        }
+
+        private TextBox PhoneBox
+        {
+            get { return GetMainContentControl<TextBox>("phone"); }
+        }
+
+        private TextBox DepartmentBox
+        {
+            get { return GetMainContentControl<TextBox>("department"); }
+        }
+
+        private TextBox BatchBox
+        {
+            get { return GetMainContentControl<TextBox>("batch"); }
+        }
+
+        private DropDownList InterestBox
+        {
+            get { return GetMainContentControl<DropDownList>("interest"); }
+        }
+
+        private TextBox MessageBox
+        {
+            get { return GetMainContentControl<TextBox>("message"); }
+        }
+
+        private Label FormStatus
+        {
+            get { return GetMainContentControl<Label>("formStatus"); }
+        }
     }
 }

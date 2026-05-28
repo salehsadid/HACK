@@ -1,0 +1,131 @@
+.admin-page {
+    width: min(1280px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 34px 0 60px;
+}
+
+.admin-hero,
+.admin-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.admin-hero {
+    padding: 26px;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+}
+
+.admin-hero h1 {
+    font-size: clamp(1.9rem, 4vw, 4.2rem);
+}
+
+.admin-card {
+    padding: 22px;
+    margin-top: 18px;
+}
+
+.admin-section-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.admin-section-head h2,
+.table-card h2 {
+    margin: 0;
+    font-size: 1.35rem;
+}
+
+.admin-form {
+    align-items: start;
+}
+
+.table-card {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    min-width: 980px;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+}
+
+.admin-table th {
+    color: var(--text);
+    background: var(--surface-2);
+    font-weight: 900;
+}
+
+.admin-table td {
+    color: var(--muted);
+}
+
+.admin-table input[type="text"],
+.admin-table input[type="number"],
+.admin-table textarea {
+    width: 100%;
+    min-width: 120px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 8px;
+    background: var(--surface-2);
+    color: var(--text);
+}
+
+.admin-table a,
+.mini-button,
+.admin-table input[type="button"],
+.admin-table input[type="submit"] {
+    display: inline-flex;
+    min-height: 32px;
+    align-items: center;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--surface-2);
+    color: var(--text);
+    padding: 6px 9px;
+    margin: 2px;
+    text-decoration: none;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.mini-button.primary {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+
+.mini-button.danger {
+    color: #fff;
+    background: #b42318;
+    border-color: #b42318;
+}
+
+@media (max-width: 760px) {
+    .admin-page {
+        width: calc(100% - 24px);
+    }
+
+    .admin-hero,
+    .admin-section-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

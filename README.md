@@ -14,7 +14,7 @@ This repository now includes a beginner-friendly ASP.NET Web Forms version of th
 
 - This is classic ASP.NET Web Forms, so it targets .NET Framework 4.8.
 - Visual Studio Code can edit the files, but running/debugging usually happens through IIS Express or Visual Studio on Windows.
-- The existing `styles.css`, `script.js`, and `resource/` folder are reused to keep the UI the same.
+- The WebForms pages use `styles.css`, `script.js`, and online image URLs for the UI.
 
 ## How it works
 

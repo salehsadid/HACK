@@ -1,6 +1,6 @@
-<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Site.master" CodeBehind="Blog.aspx.cs" Inherits="HACK.WebForms.Blog" Title="HACK KUET Blog" %>
+<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Site.master" CodeFile="Blog.aspx.cs" Inherits="HACK.WebForms.Blog" Title="HACK KUET Blog" %>
 <asp:Content ID="BlogContent" ContentPlaceHolderID="MainContent" runat="server">
-    <section class="hero-banner" style="--hero-image: url('resource/blog-illustration.svg');">
+    <section class="hero-banner" style="--hero-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&amp;fit=crop&amp;w=1800&amp;q=85');">
         <div class="hero-content">
             <p class="hero-script">Our Stories</p>
             <h2 class="hero-title">HACK BLOG AND MEMBER INSIGHTS</h2>
