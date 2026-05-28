@@ -1,0 +1,59 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Admin.master.cs" Inherits="AdminMaster" %>
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        <asp:ContentPlaceHolder ID="PageTitle" runat="server">HACK Admin</asp:ContentPlaceHolder>
+    </title>
+    <link rel="stylesheet" href="<%: ResolveUrl("~/styles.css?v=20260517-1") %>" />
+    <link rel="stylesheet" href="<%: ResolveUrl("~/admin.css?v=20260517-1") %>" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
+</head>
+<body>
+    <form id="adminForm" runat="server">
+        <div class="admin-shell">
+
+            <aside class="admin-sidebar">
+                <div class="sidebar-brand">
+                    <a href="<%: ResolveUrl("~/Admin/Dashboard.aspx") %>">
+                        <img src="https://ui-avatars.com/api/?name=HACK&background=0f766e&color=fff&bold=true&size=96" alt="HACK KUET" width="32" height="32" />
+                        <span>HACK Admin</span>
+                    </a>
+                    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
+                        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="12" r="4"></circle>
+                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                        </svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 7 7 0 1 0 20.5 14.5Z"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <nav class="sidebar-nav" aria-label="Admin navigation">
+                    <a class='<%: GetSideNavClass("Dashboard.aspx") %>' href="<%: ResolveUrl("~/Admin/Dashboard.aspx") %>">Dashboard</a>
+                    <a class='<%: GetSideNavClass("Notices.aspx") %>' href="<%: ResolveUrl("~/Admin/Notices.aspx") %>">Notices</a>
+                    <a class='<%: GetSideNavClass("Gallery.aspx") %>' href="<%: ResolveUrl("~/Admin/Gallery.aspx") %>">Gallery</a>
+                    <a class='<%: GetSideNavClass("Projects.aspx") %>' href="<%: ResolveUrl("~/Admin/Projects.aspx") %>">Projects</a>
+                    <a class='<%: GetSideNavClass("Achievements.aspx") %>' href="<%: ResolveUrl("~/Admin/Achievements.aspx") %>">Achievements</a>
+                    <a class='<%: GetSideNavClass("Applicants.aspx") %>' href="<%: ResolveUrl("~/Admin/Applicants.aspx") %>">Applicants</a>
+                    <a class='<%: GetSideNavClass("Members.aspx") %>' href="<%: ResolveUrl("~/Admin/Members.aspx") %>">Members</a>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <a href="<%: ResolveUrl("~/Home.aspx") %>" class="sidebar-link sidebar-back">&#8592; Public Site</a>
+                    <asp:Button ID="logoutBtn" runat="server" CssClass="btn btn-ghost sidebar-logout" Text="Logout" CausesValidation="false" OnClick="Logout_Click" />
+                </div>
+            </aside>
+
+            <main class="admin-main">
+                <asp:ContentPlaceHolder ID="AdminContent" runat="server" />
+            </main>
+
+        </div>
+    </form>
+    <script src="<%: ResolveUrl("~/script.js?v=20260517-1") %>" defer></script>
+</body>
+</html>

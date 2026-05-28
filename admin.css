@@ -118,6 +118,152 @@
     border-color: #b42318;
 }
 
+/* ── Admin shell layout ─────────────────────────────── */
+.admin-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 16px 16px 14px;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+}
+
+.sidebar-brand a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 800;
+    font-size: 0.95rem;
+}
+
+.sidebar-brand .theme-toggle {
+    flex-shrink: 0;
+}
+
+.sidebar-nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+    gap: 2px;
+}
+
+.sidebar-link {
+    display: block;
+    padding: 9px 18px;
+    text-decoration: none;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-left: 3px solid transparent;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.sidebar-link:hover {
+    color: var(--text);
+    background: var(--surface-2);
+}
+
+.sidebar-link.active {
+    color: var(--primary);
+    border-left-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 8%, transparent);
+}
+
+.sidebar-footer {
+    padding: 14px 16px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.sidebar-back {
+    font-size: 0.82rem;
+}
+
+.sidebar-logout {
+    width: 100%;
+    text-align: center;
+}
+
+.admin-main {
+    flex: 1;
+    min-width: 0;
+    padding: 32px;
+}
+
+.admin-actions {
+    padding-top: 12px;
+    display: flex;
+    gap: 10px;
+}
+
+/* ── Dashboard stat cards ───────────────────────────── */
+.dash-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+    margin-top: 24px;
+}
+
+.dash-stat-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 26px 22px;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-shadow: var(--shadow);
+}
+
+.dash-stat-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.dash-stat-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.dash-stat-count {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--primary);
+    line-height: 1;
+}
+
+/* ── Responsive ─────────────────────────────────────── */
 @media (max-width: 760px) {
     .admin-page {
         width: calc(100% - 24px);
@@ -127,5 +273,55 @@
     .admin-section-head {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .admin-shell {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 8px;
+        gap: 0;
+    }
+
+    .sidebar-link {
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        padding: 6px 11px;
+        font-size: 0.82rem;
+    }
+
+    .sidebar-link.active {
+        border-bottom-color: var(--primary);
+        border-left-color: transparent;
+        background: color-mix(in srgb, var(--primary) 8%, transparent);
+    }
+
+    .sidebar-footer {
+        flex-direction: row;
+        align-items: center;
+        padding: 10px 14px;
+    }
+
+    .sidebar-logout {
+        width: auto;
+    }
+
+    .admin-main {
+        padding: 18px;
+    }
+
+    .dash-stats {
+        grid-template-columns: 1fr 1fr;
     }
 }

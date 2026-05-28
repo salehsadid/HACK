@@ -163,6 +163,18 @@ UPDATE dbo.ClubContent SET ImageUrl = 'https://images.unsplash.com/photo-1518770
 UPDATE dbo.ClubContent SET ImageUrl = 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1200&q=85' WHERE ImageUrl = 'resource/hw3.jpg';
 UPDATE dbo.ClubContent SET ImageUrl = 'https://images.unsplash.com/photo-1555664424-778a1e5e1b48?auto=format&fit=crop&w=1200&q=85' WHERE ImageUrl = 'resource/Hardware.webp';";
 
+        public static int GetAdminCount()
+        {
+            EnsureDatabase();
+
+            using (var conn = CreateConnection())
+            using (var cmd = new SqlCommand("SELECT COUNT(*) FROM dbo.AdminUsers", conn))
+            {
+                conn.Open();
+                return (int)cmd.ExecuteScalar();
+            }
+        }
+
         public static bool ValidateAdmin(string username, string password)
         {
             EnsureDatabase();
