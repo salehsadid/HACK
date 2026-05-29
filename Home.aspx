@@ -7,17 +7,17 @@
             </div>
             <div class="hero-inner">
                 <p class="eyebrow">KUET Hardware Community</p>
-                <h1>Build real hardware, from bare board to working system.</h1>
-                <p class="hero-copy">HACK is a student engineering club for embedded systems, robotics, FPGA, IoT, automation, PCB assembly, and competition-ready prototyping.</p>
+                <h1>Build real hardware, from bare board to working system</h1>
+                <p class="hero-copy">HACK is a student engineering club for embedded systems, robotics, FPGA, IoT, automation, PCB assembly, and competition-ready prototyping</p>
                 <div class="hero-actions">
                     <a class="btn btn-primary" href="Register.aspx">Apply for Membership</a>
                     <a class="btn btn-ghost" href="#projects">View Projects</a>
                 </div>
                 <div class="metric-row" aria-label="Club statistics">
-                    <div><strong>120+</strong><span>builders</span></div>
-                    <div><strong>35+</strong><span>labs yearly</span></div>
-                    <div><strong>18</strong><span>awards</span></div>
-                    <div><strong>9</strong><span>active teams</span></div>
+                    <div><strong>120+</strong><span>Members</span></div>
+                    <div><strong>35+</strong><span>Workshops</span></div>
+                    <div><strong>8</strong><span>Awards</span></div>
+                    <div><strong>3</strong><span>National Events</span></div>
                 </div>
             </div>
         </section>
@@ -64,6 +64,10 @@
                             <div>
                                 <h3><%# Eval("Title") %></h3>
                                 <p><%# Eval("Body") %></p>
+                                <asp:Image ID="noticeImg" runat="server"
+                                    ImageUrl='<%# ContentImgSrc(Eval("Id")) %>'
+                                    Visible='<%# NoticeHasImage(Eval("HasImage")) %>'
+                                    CssClass="notice-img" AlternateText='<%# Eval("Title") %>' />
                             </div>
                         </article>
                     </ItemTemplate>
@@ -75,16 +79,16 @@
             <div class="section-head">
                 <p class="eyebrow">Achievements</p>
                 <h2>Proof From The Workbench</h2>
-            </div>
+            </div>  
             <div class="card-grid">
                 <asp:Repeater ID="achievementsRepeater" runat="server">
                     <ItemTemplate>
                         <article class="content-card">
-                            <img src="<%# Eval("ImageUrl") %>" alt="<%# Eval("Title") %>" />
+                            <img src='<%# ContentImgSrc(Eval("Id")) %>' alt='<%# Eval("Title") %>' />
                             <div>
                                 <span class="pill"><%# Eval("Meta") %></span>
                                 <h3><%# Eval("Title") %></h3>
-                                <p><%# Eval("Body") %></p>
+                                <p><%# Eval("Subtitle") %></p>
                             </div>
                         </article>
                     </ItemTemplate>
@@ -94,18 +98,18 @@
 
         <section id="projects" class="section dark-band">
             <div class="section-head">
-                <p class="eyebrow">Projects</p>
+                <p class="eyebrow">Projects</p>     
                 <h2>Current Build Tracks</h2>
             </div>
             <div class="card-grid">
                 <asp:Repeater ID="projectsRepeater" runat="server">
                     <ItemTemplate>
                         <article class="content-card">
-                            <img src="<%# Eval("ImageUrl") %>" alt="<%# Eval("Title") %>" />
+                            <img src='<%# ContentImgSrc(Eval("Id")) %>' alt='<%# Eval("Title") %>' />
                             <div>
                                 <span class="pill"><%# Eval("Meta") %></span>
                                 <h3><%# Eval("Title") %></h3>
-                                <p><%# Eval("Body") %></p>
+                                <p><%# Eval("Subtitle") %></p>
                             </div>
                         </article>
                     </ItemTemplate>
@@ -122,8 +126,9 @@
                 <asp:Repeater ID="galleryRepeater" runat="server">
                     <ItemTemplate>
                         <figure>
-                            <img src="<%# Eval("ImageUrl") %>" alt="<%# Eval("Title") %>" />
+                            <img src='<%# ContentImgSrc(Eval("Id")) %>' alt='<%# Eval("Title") %>' />
                             <figcaption>
+                                <span class="pill"><%# Eval("Meta") %></span>
                                 <strong><%# Eval("Title") %></strong>
                                 <span><%# Eval("Subtitle") %></span>
                             </figcaption>

@@ -6,6 +6,7 @@
             <p class="eyebrow">Overview</p>
             <h1>Dashboard</h1>
         </div>
+        <a href="<%: ResolveUrl("~/Home.aspx") %>" class="btn btn-ghost btn-sm">Public Site</a>
     </div>
 
     <div class="dash-stats">
@@ -20,10 +21,6 @@
         <a href="Notices.aspx" class="dash-stat-card">
             <span class="dash-stat-label">Active Notices</span>
             <asp:Label ID="lblNotices" runat="server" CssClass="dash-stat-count" Text="0" />
-        </a>
-        <a href="#" class="dash-stat-card">
-            <span class="dash-stat-label">Total Admins</span>
-            <asp:Label ID="lblAdmins" runat="server" CssClass="dash-stat-count" Text="0" />
         </a>
     </div>
 </asp:Content>

@@ -207,6 +207,7 @@
 .sidebar-logout {
     width: 100%;
     text-align: center;
+    color: #b42318;
 }
 
 .admin-main {
@@ -219,6 +220,25 @@
     padding-top: 12px;
     display: flex;
     gap: 10px;
+}
+
+.search-bar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.search-bar input[type="text"] {
+    height: 34px;
+    min-width: 220px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0 10px;
+    background: var(--surface-2);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.88rem;
 }
 
 /* ── Dashboard stat cards ───────────────────────────── */
@@ -263,6 +283,29 @@
     line-height: 1;
 }
 
+/* ── Sidebar hamburger (hidden on desktop) ──────────── */
+.sidebar-brand-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.sidebar-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--text);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
 /* ── Responsive ─────────────────────────────────────── */
 @media (max-width: 760px) {
     .admin-page {
@@ -273,6 +316,10 @@
     .admin-section-head {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .admin-card {
+        padding: 14px;
     }
 
     .admin-shell {
@@ -287,41 +334,49 @@
         border-bottom: 1px solid var(--line);
     }
 
-    .sidebar-nav {
-        flex-direction: row;
-        flex-wrap: wrap;
-        padding: 8px;
-        gap: 0;
+    .sidebar-toggle {
+        display: flex;
     }
 
-    .sidebar-link {
-        border-left: none;
-        border-bottom: 3px solid transparent;
-        padding: 6px 11px;
-        font-size: 0.82rem;
+    /* nav + footer collapsed by default on mobile */
+    .admin-sidebar .sidebar-nav,
+    .admin-sidebar .sidebar-footer {
+        display: none;
     }
 
-    .sidebar-link.active {
-        border-bottom-color: var(--primary);
-        border-left-color: transparent;
-        background: color-mix(in srgb, var(--primary) 8%, transparent);
+    /* expanded state */
+    .admin-sidebar.sidebar-open .sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        padding: 8px 0;
+        gap: 2px;
     }
 
-    .sidebar-footer {
+    .admin-sidebar.sidebar-open .sidebar-footer {
+        display: flex;
         flex-direction: row;
         align-items: center;
         padding: 10px 14px;
     }
 
-    .sidebar-logout {
+    .admin-sidebar.sidebar-open .sidebar-logout {
         width: auto;
     }
 
     .admin-main {
-        padding: 18px;
+        padding: 16px;
     }
 
     .dash-stats {
         grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .dash-stat-card {
+        padding: 18px 14px;
+    }
+
+    .dash-stat-count {
+        font-size: 2rem;
     }
 }

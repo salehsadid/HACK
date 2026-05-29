@@ -46,6 +46,15 @@
         });
     });
 
+    document.querySelectorAll(".sidebar-toggle").forEach(function (btn) {
+        var sidebar = btn.closest(".admin-sidebar");
+        if (!sidebar) return;
+        btn.addEventListener("click", function () {
+            var open = sidebar.classList.toggle("sidebar-open");
+            btn.setAttribute("aria-expanded", String(open));
+        });
+    });
+
     var messageField = document.querySelector("#message");
     var counter = document.querySelector("[data-char-counter]");
 

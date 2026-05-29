@@ -161,7 +161,32 @@ END;
 
 UPDATE dbo.ClubContent SET ImageUrl = 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=85' WHERE ImageUrl IN ('resource/hw2.jpg', 'resource/arduino.avif');
 UPDATE dbo.ClubContent SET ImageUrl = 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1200&q=85' WHERE ImageUrl = 'resource/hw3.jpg';
-UPDATE dbo.ClubContent SET ImageUrl = 'https://images.unsplash.com/photo-1555664424-778a1e5e1b48?auto=format&fit=crop&w=1200&q=85' WHERE ImageUrl = 'resource/Hardware.webp';";
+UPDATE dbo.ClubContent SET ImageUrl = 'https://images.unsplash.com/photo-1555664424-778a1e5e1b48?auto=format&fit=crop&w=1200&q=85' WHERE ImageUrl = 'resource/Hardware.webp';
+
+IF OBJECT_ID('dbo.ClubPersons', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.ClubPersons (
+        Id            INT IDENTITY(1,1) PRIMARY KEY,
+        PersonType    NVARCHAR(30)  NOT NULL,
+        ClubDesignation NVARCHAR(100) NOT NULL,
+        Name          NVARCHAR(120) NOT NULL,
+        PicUrl        NVARCHAR(500) NULL,
+        Info          NVARCHAR(300) NULL,
+        DisplayOrder  INT NOT NULL DEFAULT 0,
+        IsActive      BIT NOT NULL DEFAULT 1,
+        ImageData     VARBINARY(MAX) NULL,
+        ImageMimeType NVARCHAR(50) NULL
+    );
+END;
+
+IF COL_LENGTH('dbo.ClubContent', 'ImageData') IS NULL
+    ALTER TABLE dbo.ClubContent ADD ImageData VARBINARY(MAX) NULL;
+IF COL_LENGTH('dbo.ClubContent', 'ImageMimeType') IS NULL
+    ALTER TABLE dbo.ClubContent ADD ImageMimeType NVARCHAR(50) NULL;
+IF COL_LENGTH('dbo.ClubPersons', 'ImageData') IS NULL
+    ALTER TABLE dbo.ClubPersons ADD ImageData VARBINARY(MAX) NULL;
+IF COL_LENGTH('dbo.ClubPersons', 'ImageMimeType') IS NULL
+    ALTER TABLE dbo.ClubPersons ADD ImageMimeType NVARCHAR(50) NULL;";
 
         public static int GetAdminCount()
         {
@@ -322,7 +347,8 @@ ORDER BY ContentType, DisplayOrder, CreatedAt DESC", conn))
             EnsureDatabase();
 
             using (var conn = CreateConnection())
-            using (var cmd = new SqlCommand(@"SELECT Id, ContentType, Title, Subtitle, Body, ImageUrl, Meta, DisplayOrder, IsActive, CreatedAt
+            using (var cmd = new SqlCommand(@"SELECT Id, ContentType, Title, Subtitle, Body, ImageUrl, Meta, DisplayOrder, IsActive, CreatedAt,
+    CAST(CASE WHEN ImageData IS NOT NULL OR (ImageUrl IS NOT NULL AND LEN(ImageUrl) > 0) THEN 1 ELSE 0 END AS BIT) AS HasImage
 FROM dbo.ClubContent
 WHERE ContentType = @ContentType AND IsActive = 1
 ORDER BY DisplayOrder, CreatedAt DESC", conn))
@@ -340,8 +366,8 @@ ORDER BY DisplayOrder, CreatedAt DESC", conn))
             EnsureDatabase();
 
             using (var conn = CreateConnection())
-            using (var cmd = new SqlCommand(@"INSERT INTO dbo.ClubContent (ContentType, Title, Subtitle, Body, ImageUrl, Meta, DisplayOrder, IsActive)
-VALUES (@ContentType, @Title, @Subtitle, @Body, @ImageUrl, @Meta, @DisplayOrder, @IsActive)", conn))
+            using (var cmd = new SqlCommand(@"INSERT INTO dbo.ClubContent (ContentType, Title, Subtitle, Body, ImageData, ImageMimeType, Meta, DisplayOrder, IsActive)
+VALUES (@ContentType, @Title, @Subtitle, @Body, @ImageData, @ImageMimeType, @Meta, @DisplayOrder, @IsActive)", conn))
             {
                 AddContentParameters(cmd, item);
                 conn.Open();
@@ -355,7 +381,9 @@ VALUES (@ContentType, @Title, @Subtitle, @Body, @ImageUrl, @Meta, @DisplayOrder,
 
             using (var conn = CreateConnection())
             using (var cmd = new SqlCommand(@"UPDATE dbo.ClubContent
-SET ContentType = @ContentType, Title = @Title, Subtitle = @Subtitle, Body = @Body, ImageUrl = @ImageUrl,
+SET ContentType = @ContentType, Title = @Title, Subtitle = @Subtitle, Body = @Body,
+    ImageData     = CASE WHEN @ImageData IS NULL THEN ImageData ELSE @ImageData END,
+    ImageMimeType = CASE WHEN @ImageData IS NULL THEN ImageMimeType ELSE @ImageMimeType END,
     Meta = @Meta, DisplayOrder = @DisplayOrder, IsActive = @IsActive
 WHERE Id = @Id", conn))
             {
@@ -369,6 +397,173 @@ WHERE Id = @Id", conn))
         public static void DeleteContent(int id)
         {
             DeleteById("dbo.ClubContent", id);
+        }
+
+        // ── About text ────────────────────────────────────────
+
+        public static string GetAboutText()
+        {
+            EnsureDatabase();
+
+            using (var conn = CreateConnection())
+            using (var cmd = new SqlCommand(
+                "SELECT TOP 1 Body FROM dbo.ClubContent WHERE ContentType = 'about' AND IsActive = 1 ORDER BY DisplayOrder", conn))
+            {
+                conn.Open();
+                var result = cmd.ExecuteScalar();
+                return (result == null || result == DBNull.Value) ? string.Empty : result.ToString();
+            }
+        }
+
+        public static void SaveAboutText(string body)
+        {
+            EnsureDatabase();
+
+            using (var conn = CreateConnection())
+            using (var cmd = new SqlCommand(@"
+IF EXISTS (SELECT 1 FROM dbo.ClubContent WHERE ContentType = 'about')
+    UPDATE dbo.ClubContent SET Body = @Body, IsActive = 1 WHERE ContentType = 'about'
+ELSE
+    INSERT INTO dbo.ClubContent (ContentType, Title, Body, DisplayOrder, IsActive)
+    VALUES ('about', 'About HACK', @Body, 0, 1)", conn))
+            {
+                cmd.Parameters.Add("@Body", SqlDbType.NVarChar, 900).Value = NullSafe(body);
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        // ── Club persons (moderators / executives) ────────────
+
+        public static DataTable GetClubPersons()
+        {
+            EnsureDatabase();
+
+            using (var conn = CreateConnection())
+            using (var cmd = new SqlCommand(
+                "SELECT Id, PersonType, ClubDesignation, Name, PicUrl, Info, DisplayOrder, IsActive FROM dbo.ClubPersons ORDER BY PersonType, DisplayOrder", conn))
+            using (var adapter = new SqlDataAdapter(cmd))
+            {
+                var table = new DataTable();
+                adapter.Fill(table);
+                return table;
+            }
+        }
+
+        public static DataTable GetClubPersons(string personType)
+        {
+            EnsureDatabase();
+
+            using (var conn = CreateConnection())
+            using (var cmd = new SqlCommand(
+                "SELECT Id, PersonType, ClubDesignation, Name, PicUrl, Info, DisplayOrder FROM dbo.ClubPersons WHERE PersonType = @PersonType AND IsActive = 1 ORDER BY DisplayOrder", conn))
+            using (var adapter = new SqlDataAdapter(cmd))
+            {
+                cmd.Parameters.Add("@PersonType", SqlDbType.NVarChar, 30).Value = personType;
+                var table = new DataTable();
+                adapter.Fill(table);
+                return table;
+            }
+        }
+
+        public static void InsertClubPerson(ClubPerson person)
+        {
+            EnsureDatabase();
+
+            using (var conn = CreateConnection())
+            using (var cmd = new SqlCommand(@"INSERT INTO dbo.ClubPersons (PersonType, ClubDesignation, Name, ImageData, ImageMimeType, Info, DisplayOrder, IsActive)
+VALUES (@PersonType, @ClubDesignation, @Name, @ImageData, @ImageMimeType, @Info, @DisplayOrder, @IsActive)", conn))
+            {
+                AddClubPersonParameters(cmd, person);
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public static void UpdateClubPerson(int id, ClubPerson person)
+        {
+            EnsureDatabase();
+
+            using (var conn = CreateConnection())
+            using (var cmd = new SqlCommand(@"UPDATE dbo.ClubPersons
+SET PersonType = @PersonType, ClubDesignation = @ClubDesignation, Name = @Name,
+    ImageData     = CASE WHEN @ImageData IS NULL THEN ImageData ELSE @ImageData END,
+    ImageMimeType = CASE WHEN @ImageData IS NULL THEN ImageMimeType ELSE @ImageMimeType END,
+    Info = @Info, DisplayOrder = @DisplayOrder, IsActive = @IsActive
+WHERE Id = @Id", conn))
+            {
+                cmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+                AddClubPersonParameters(cmd, person);
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public static void DeleteClubPerson(int id)
+        {
+            DeleteById("dbo.ClubPersons", id);
+        }
+
+        private static void AddClubPersonParameters(SqlCommand cmd, ClubPerson person)
+        {
+            cmd.Parameters.Add("@PersonType",      SqlDbType.NVarChar, 30).Value  = NullSafe(person.PersonType);
+            cmd.Parameters.Add("@ClubDesignation", SqlDbType.NVarChar, 100).Value = NullSafe(person.ClubDesignation);
+            cmd.Parameters.Add("@Name",            SqlDbType.NVarChar, 120).Value = NullSafe(person.Name);
+            var imgParam = cmd.Parameters.Add("@ImageData", SqlDbType.VarBinary, -1);
+            imgParam.Value = person.ImageData != null ? (object)person.ImageData : DBNull.Value;
+            cmd.Parameters.Add("@ImageMimeType",   SqlDbType.NVarChar, 50).Value  = DbValue(person.ImageMimeType);
+            cmd.Parameters.Add("@Info",            SqlDbType.NVarChar, 300).Value = DbValue(person.Info);
+            cmd.Parameters.Add("@DisplayOrder",    SqlDbType.Int).Value            = person.DisplayOrder;
+            cmd.Parameters.Add("@IsActive",        SqlDbType.Bit).Value            = person.IsActive;
+        }
+
+        public static ImageResult GetContentImage(int id)
+        {
+            EnsureDatabase();
+            using (var conn = CreateConnection())
+            using (var cmd = new SqlCommand(
+                "SELECT ImageData, ImageMimeType, ImageUrl FROM dbo.ClubContent WHERE Id = @Id", conn))
+            {
+                cmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+                conn.Open();
+                using (var reader = cmd.ExecuteReader(CommandBehavior.SingleRow))
+                {
+                    if (reader.Read())
+                    {
+                        return new ImageResult
+                        {
+                            Data        = reader["ImageData"] as byte[],
+                            MimeType    = reader["ImageMimeType"] as string,
+                            FallbackUrl = reader["ImageUrl"] as string
+                        };
+                    }
+                }
+            }
+            return new ImageResult();
+        }
+
+        public static ImageResult GetPersonImage(int id)
+        {
+            EnsureDatabase();
+            using (var conn = CreateConnection())
+            using (var cmd = new SqlCommand(
+                "SELECT ImageData, ImageMimeType FROM dbo.ClubPersons WHERE Id = @Id", conn))
+            {
+                cmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+                conn.Open();
+                using (var reader = cmd.ExecuteReader(CommandBehavior.SingleRow))
+                {
+                    if (reader.Read())
+                    {
+                        return new ImageResult
+                        {
+                            Data     = reader["ImageData"] as byte[],
+                            MimeType = reader["ImageMimeType"] as string
+                        };
+                    }
+                }
+            }
+            return new ImageResult();
         }
 
         private static void AddPersonParameters(SqlCommand cmd, RegistrationEntry entry)
@@ -385,14 +580,16 @@ WHERE Id = @Id", conn))
 
         private static void AddContentParameters(SqlCommand cmd, ClubContentItem item)
         {
-            cmd.Parameters.Add("@ContentType", SqlDbType.NVarChar, 30).Value = NullSafe(item.ContentType);
-            cmd.Parameters.Add("@Title", SqlDbType.NVarChar, 160).Value = NullSafe(item.Title);
-            cmd.Parameters.Add("@Subtitle", SqlDbType.NVarChar, 220).Value = DbValue(item.Subtitle);
-            cmd.Parameters.Add("@Body", SqlDbType.NVarChar, 900).Value = DbValue(item.Body);
-            cmd.Parameters.Add("@ImageUrl", SqlDbType.NVarChar, 260).Value = DbValue(item.ImageUrl);
-            cmd.Parameters.Add("@Meta", SqlDbType.NVarChar, 120).Value = DbValue(item.Meta);
-            cmd.Parameters.Add("@DisplayOrder", SqlDbType.Int).Value = item.DisplayOrder;
-            cmd.Parameters.Add("@IsActive", SqlDbType.Bit).Value = item.IsActive;
+            cmd.Parameters.Add("@ContentType",   SqlDbType.NVarChar, 30).Value  = NullSafe(item.ContentType);
+            cmd.Parameters.Add("@Title",         SqlDbType.NVarChar, 160).Value = NullSafe(item.Title);
+            cmd.Parameters.Add("@Subtitle",      SqlDbType.NVarChar, 220).Value = DbValue(item.Subtitle);
+            cmd.Parameters.Add("@Body",          SqlDbType.NVarChar, 900).Value = DbValue(item.Body);
+            var imgParam = cmd.Parameters.Add("@ImageData", SqlDbType.VarBinary, -1);
+            imgParam.Value = item.ImageData != null ? (object)item.ImageData : DBNull.Value;
+            cmd.Parameters.Add("@ImageMimeType", SqlDbType.NVarChar, 50).Value  = DbValue(item.ImageMimeType);
+            cmd.Parameters.Add("@Meta",          SqlDbType.NVarChar, 120).Value = DbValue(item.Meta);
+            cmd.Parameters.Add("@DisplayOrder",  SqlDbType.Int).Value            = item.DisplayOrder;
+            cmd.Parameters.Add("@IsActive",      SqlDbType.Bit).Value            = item.IsActive;
         }
 
         private static string NullSafe(string value)

@@ -7,15 +7,15 @@
     <title>
         <asp:ContentPlaceHolder ID="PageTitle" runat="server">HACK KUET | Hardware Acceleration Club</asp:ContentPlaceHolder>
     </title>
-    <link rel="stylesheet" href="<%: ResolveUrl("~/styles.css?v=20260517-1") %>" />
-    <script src="<%: ResolveUrl("~/script.js?v=20260517-1") %>" defer></script>
+    <link rel="stylesheet" href="<%: ResolveUrl("~/styles.css?v=20260529-1") %>" />
+    <script src="<%: ResolveUrl("~/script.js?v=20260529-1") %>" defer></script>
     <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
 </head>
 <body>
     <form id="siteForm" runat="server">
         <header class="site-header">
             <a class="brand" href="~/Home.aspx" runat="server" aria-label="HACK KUET home">
-                <img src="https://ui-avatars.com/api/?name=HACK&background=0f766e&color=fff&bold=true&size=96" alt="HACK KUET" />
+                <img src="<%: ResolveUrl("~/resources/logo.jpg") %>" alt="HACK KUET" />
                 <span>
                     <strong>HACK KUET</strong>
                     <small>Hardware Acceleration Club</small>
@@ -38,25 +38,31 @@
 
             <nav id="site-nav" class="main-nav" aria-label="Main navigation">
                 <a class='<%: GetNavClass("Home.aspx") %>' href="~/Home.aspx" runat="server">Home</a>
+                <a class='<%: GetNavClass("About.aspx") %>' href="~/About.aspx" runat="server">About</a>
                 <a class="nav-link" href="~/Home.aspx#notices" runat="server">Notices</a>
                 <a class="nav-link" href="~/Home.aspx#projects" runat="server">Projects</a>
                 <a class="nav-link" href="~/Home.aspx#gallery" runat="server">Gallery</a>
                 <a class='<%: GetNavClass("Register.aspx") %>' href="~/Register.aspx" runat="server">Registration</a>
-                <a class='<%: GetNavClass("Admin/Dashboard.aspx") %>' href="~/Admin/Dashboard.aspx" runat="server">Admin</a>
             </nav>
         </header>
 
         <asp:ContentPlaceHolder ID="MainContent" runat="server" />
 
         <footer class="site-footer">
-            <div>
-                <strong>Hardware Acceleration Club of KUET</strong>
-                <p>Embedded systems, robotics, FPGA, automation, and student-built hardware products.</p>
+            <div class="footer-top">
+                <div>
+                    <strong>Hardware Acceleration Club of KUET</strong>
+                    <p>Embedded systems, robotics, FPGA, automation, and student-built hardware products.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://www.facebook.com/profile.php?id=100088262984928" target="_blank" rel="noopener noreferrer">Facebook</a>
+                    <a href="https://www.facebook.com/groups/hack.kuet" target="_blank" rel="noopener noreferrer">Community</a>
+                    <a href="~/Register.aspx" runat="server">Apply</a>
+                </div>
             </div>
-            <div class="footer-links">
-                <a href="https://www.facebook.com/profile.php?id=100088262984928" target="_blank" rel="noopener noreferrer">Facebook</a>
-                <a href="https://www.facebook.com/groups/hack.kuet" target="_blank" rel="noopener noreferrer">Community</a>
-                <a href="~/Register.aspx" runat="server">Apply</a>
+            <div class="footer-bottom">
+                <small>&copy; 2025 HACK KUET. All rights reserved.</small>
+                <a href="~/Admin/Dashboard.aspx" runat="server" class="footer-admin-link">Admin</a>
             </div>
         </footer>
     </form>

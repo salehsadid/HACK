@@ -3,6 +3,25 @@ using System.Collections.Generic;
 
 namespace HACK.WebForms
 {
+    public class ImageResult
+    {
+        public byte[] Data { get; set; }
+        public string MimeType { get; set; }
+        public string FallbackUrl { get; set; }
+    }
+
+    public class ClubPerson
+    {
+        public string PersonType { get; set; }
+        public string ClubDesignation { get; set; }
+        public string Name { get; set; }
+        public byte[] ImageData { get; set; }
+        public string ImageMimeType { get; set; }
+        public string Info { get; set; }
+        public int DisplayOrder { get; set; }
+        public bool IsActive { get; set; }
+    }
+
     public class RegistrationEntry
     {
         public string FullName { get; set; }
@@ -21,7 +40,8 @@ namespace HACK.WebForms
         public string Title { get; set; }
         public string Subtitle { get; set; }
         public string Body { get; set; }
-        public string ImageUrl { get; set; }
+        public byte[] ImageData { get; set; }
+        public string ImageMimeType { get; set; }
         public string Meta { get; set; }
         public int DisplayOrder { get; set; }
         public bool IsActive { get; set; }

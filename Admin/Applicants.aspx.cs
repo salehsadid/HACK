@@ -28,9 +28,28 @@ public partial class AdminApplicants : Page
         BindApplicants();
     }
 
-    private void BindApplicants()
+    protected void Search_Click(object sender, EventArgs e)
     {
-        applicantsGrid.DataSource = HACK.WebForms.HackRepository.GetApplicants();
+        BindApplicants(searchBox.Text.Trim());
+    }
+
+    private void BindApplicants(string query = "")
+    {
+        var dt = HACK.WebForms.HackRepository.GetApplicants();
+        if (query.Length > 0)
+        {
+            var view = new System.Data.DataView(dt);
+            var safe = query.Replace("'", "''");
+            view.RowFilter = "FullName LIKE '%" + safe + "%'"
+                + " OR Email LIKE '%" + safe + "%'"
+                + " OR Department LIKE '%" + safe + "%'"
+                + " OR Batch LIKE '%" + safe + "%'";
+            applicantsGrid.DataSource = view;
+        }
+        else
+        {
+            applicantsGrid.DataSource = dt;
+        }
         applicantsGrid.DataBind();
     }
 

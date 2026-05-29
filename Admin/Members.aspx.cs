@@ -67,9 +67,28 @@ public partial class AdminMembers : Page
         BindMembers();
     }
 
-    private void BindMembers()
+    protected void Search_Click(object sender, EventArgs e)
     {
-        membersGrid.DataSource = HACK.WebForms.HackRepository.GetMembers();
+        BindMembers(searchBox.Text.Trim());
+    }
+
+    private void BindMembers(string query = "")
+    {
+        var dt = HACK.WebForms.HackRepository.GetMembers();
+        if (query.Length > 0)
+        {
+            var view = new System.Data.DataView(dt);
+            var safe = query.Replace("'", "''");
+            view.RowFilter = "FullName LIKE '%" + safe + "%'"
+                + " OR Email LIKE '%" + safe + "%'"
+                + " OR Department LIKE '%" + safe + "%'"
+                + " OR Batch LIKE '%" + safe + "%'";
+            membersGrid.DataSource = view;
+        }
+        else
+        {
+            membersGrid.DataSource = dt;
+        }
         membersGrid.DataBind();
     }
 
@@ -90,5 +109,8 @@ public partial class AdminMembers : Page
         pageStatus.CssClass = success ? "form-status success" : "form-status error";
     }
 
-    private static string ReadValue(object value) => (value ?? string.Empty).ToString().Trim();
+    private static string ReadValue(object value)
+    {
+        return (value ?? string.Empty).ToString().Trim();
+    }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Web.UI;
 
 public partial class AdminDashboard : Page
@@ -9,7 +10,6 @@ public partial class AdminDashboard : Page
             lblMembers.Text   = HACK.WebForms.HackRepository.GetMembers().Rows.Count.ToString();
             lblApplicants.Text = HACK.WebForms.HackRepository.GetApplicants().Rows.Count.ToString();
             lblNotices.Text   = HACK.WebForms.HackRepository.GetContent("notice").Rows.Count.ToString();
-            lblAdmins.Text    = HACK.WebForms.HackRepository.GetAdminCount().ToString();
         }
     }
 }

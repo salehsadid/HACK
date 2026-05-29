@@ -29,7 +29,13 @@
     </section>
 
     <section class="admin-card table-card">
-        <h2>Registered Members</h2>
+        <div class="admin-section-head">
+            <h2>Registered Members</h2>
+            <div class="search-bar">
+                <asp:TextBox ID="searchBox" runat="server" placeholder="Search name, email, dept, batch…" />
+                <asp:Button ID="searchBtn" runat="server" Text="Search" CssClass="btn btn-ghost btn-sm" CausesValidation="false" OnClick="Search_Click" />
+            </div>
+        </div>
         <asp:GridView ID="membersGrid" runat="server" CssClass="admin-table" AutoGenerateColumns="false"
             DataKeyNames="Id"
             OnRowEditing="MembersGrid_RowEditing"

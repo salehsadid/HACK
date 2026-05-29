@@ -29,16 +29,12 @@
                 <asp:TextBox ID="contentMeta" runat="server" ClientIDMode="Static" />
             </div>
             <div class="form-field">
-                <label for="contentImage">Image URL</label>
-                <asp:TextBox ID="contentImage" runat="server" ClientIDMode="Static" />
+                <label>Image</label>
+                <asp:FileUpload ID="imageUpload" runat="server" accept="image/*" />
             </div>
             <div class="form-field">
                 <label for="contentOrder">Display Order</label>
                 <asp:TextBox ID="contentOrder" runat="server" ClientIDMode="Static" TextMode="Number" Text="1" />
-            </div>
-            <div class="form-field full">
-                <label for="contentBody">Body</label>
-                <asp:TextBox ID="contentBody" runat="server" ClientIDMode="Static" TextMode="MultiLine" MaxLength="900" />
             </div>
         </div>
         <div class="admin-actions">
@@ -57,8 +53,15 @@
             <Columns>
                 <asp:BoundField DataField="Title" HeaderText="Title" />
                 <asp:BoundField DataField="Subtitle" HeaderText="Subtitle" />
-                <asp:BoundField DataField="Body" HeaderText="Body" />
-                <asp:BoundField DataField="ImageUrl" HeaderText="Image URL" />
+                <asp:TemplateField HeaderText="Image">
+                    <ItemTemplate>
+                        <img src='<%# ContentImgSrc(Eval("Id")) %>' width="52" height="52" style="object-fit:cover;border-radius:4px;" onerror="this.style.display='none'" />
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                        <img src='<%# ContentImgSrc(Eval("Id")) %>' width="40" height="40" style="object-fit:cover;border-radius:4px;display:block;margin-bottom:4px;" onerror="this.style.display='none'" />
+                        <asp:FileUpload ID="imgUpload" runat="server" accept="image/*" />
+                    </EditItemTemplate>
+                </asp:TemplateField>
                 <asp:BoundField DataField="Meta" HeaderText="Meta" />
                 <asp:BoundField DataField="DisplayOrder" HeaderText="Order" />
                 <asp:CheckBoxField DataField="IsActive" HeaderText="Active" />

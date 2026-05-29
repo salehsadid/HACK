@@ -13,6 +13,11 @@ public partial class AdminAchievements : Page
             BindContent();
     }
 
+    protected string ContentImgSrc(object id)
+    {
+        return ResolveUrl("~/ImageHandler.ashx?src=content&id=" + id);
+    }
+
     protected void AddContent_Click(object sender, EventArgs e)
     {
         Page.Validate("Content");
@@ -20,14 +25,15 @@ public partial class AdminAchievements : Page
 
         HACK.WebForms.HackRepository.InsertContent(new HACK.WebForms.ClubContentItem
         {
-            ContentType  = ContentType,
-            Title        = contentTitle.Text.Trim(),
-            Subtitle     = contentSubtitle.Text.Trim(),
-            Body         = contentBody.Text.Trim(),
-            ImageUrl     = contentImage.Text.Trim(),
-            Meta         = contentMeta.Text.Trim(),
-            DisplayOrder = ToInt(contentOrder.Text, 0),
-            IsActive     = true
+            ContentType   = ContentType,
+            Title         = contentTitle.Text.Trim(),
+            Subtitle      = contentSubtitle.Text.Trim(),
+            Body          = string.Empty,
+            ImageData     = imageUpload.HasFile ? imageUpload.FileBytes : null,
+            ImageMimeType = imageUpload.HasFile ? imageUpload.PostedFile.ContentType : null,
+            Meta          = contentMeta.Text.Trim(),
+            DisplayOrder  = ToInt(contentOrder.Text, 0),
+            IsActive      = true
         });
 
         SetStatus("Achievement added.", true);
@@ -50,16 +56,19 @@ public partial class AdminAchievements : Page
     protected void ContentGrid_RowUpdating(object sender, GridViewUpdateEventArgs e)
     {
         var id = (int)contentGrid.DataKeys[e.RowIndex].Value;
+        var fu = (FileUpload)contentGrid.Rows[e.RowIndex].FindControl("imgUpload");
+
         HACK.WebForms.HackRepository.UpdateContent(id, new HACK.WebForms.ClubContentItem
         {
-            ContentType  = ContentType,
-            Title        = ReadValue(e.NewValues["Title"]),
-            Subtitle     = ReadValue(e.NewValues["Subtitle"]),
-            Body         = ReadValue(e.NewValues["Body"]),
-            ImageUrl     = ReadValue(e.NewValues["ImageUrl"]),
-            Meta         = ReadValue(e.NewValues["Meta"]),
-            DisplayOrder = ToInt(ReadValue(e.NewValues["DisplayOrder"]), 0),
-            IsActive     = ToBool(e.NewValues["IsActive"])
+            ContentType   = ContentType,
+            Title         = ReadValue(e.NewValues["Title"]),
+            Subtitle      = ReadValue(e.NewValues["Subtitle"]),
+            Body          = string.Empty,
+            ImageData     = fu != null && fu.HasFile ? fu.FileBytes : null,
+            ImageMimeType = fu != null && fu.HasFile ? fu.PostedFile.ContentType : null,
+            Meta          = ReadValue(e.NewValues["Meta"]),
+            DisplayOrder  = ToInt(ReadValue(e.NewValues["DisplayOrder"]), 0),
+            IsActive      = ToBool(e.NewValues["IsActive"])
         });
 
         contentGrid.EditIndex = -1;
@@ -88,8 +97,6 @@ public partial class AdminAchievements : Page
         contentTitle.Text    = string.Empty;
         contentSubtitle.Text = string.Empty;
         contentMeta.Text     = string.Empty;
-        contentImage.Text    = string.Empty;
-        contentBody.Text     = string.Empty;
         contentOrder.Text    = "1";
     }
 
@@ -99,7 +106,10 @@ public partial class AdminAchievements : Page
         pageStatus.CssClass = success ? "form-status success" : "form-status error";
     }
 
-    private static string ReadValue(object value) => (value ?? string.Empty).ToString().Trim();
+    private static string ReadValue(object value)
+    {
+        return (value ?? string.Empty).ToString().Trim();
+    }
 
     private static int ToInt(string value, int fallback)
     {
