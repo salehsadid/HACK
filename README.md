@@ -1,27 +1,71 @@
-# HACK Web Forms Scaffold
+# HACK Club Website
 
-This repository now includes a beginner-friendly ASP.NET Web Forms version of the HACK portfolio site.
+This is an academic web project for the Hardware Acceleration Club of KUET. The project is built with ASP.NET Web Forms and C#. It has a public website and an admin panel.
 
-## Included files
+## Main Features
 
-- `Site.master` for the shared navbar and footer
-- `Home.aspx` for the landing page
-- `Blog.aspx` for dynamic blog posts from a C# list
-- `Register.aspx` for the ASP.NET server-side registration form
-- `App_Code/ClubModels.cs` for in-memory data models and stores
+- Public home page for club information
+- Editable hero section from admin panel
+- Editable statistics and "What We Do" section
+- Notices, projects, gallery, and achievements management
+- About page with moderators and executive members
+- Member registration form
+- Applicant approval system
+- Member management from admin panel
+- Image upload, replace, and remove option
+- Default person icon when no image is uploaded
+- Admin login protection
+- Responsive layout
+- Dark and light theme toggle
+- SQL database tables are created automatically from code
+- Server-side validation
+
+## Technology Used
+
+- ASP.NET Web Forms
+- C#
+- .NET Framework 4.8
+- SQL Server LocalDB
+- HTML
+- CSS
+- JavaScript
+
+## Project Structure
+
+- `Home.aspx` contains the public home page.
+- `About.aspx` contains the public about page.
+- `Register.aspx` contains the member registration form.
+- `Admin/` contains all admin panel pages.
+- `App_Code/` contains models and database repository code.
+- `ImageHandler.ashx` loads images from the database.
+- `styles.css` contains public website styles.
+- `admin.css` contains admin panel styles.
+- `script.js` contains small client-side features like theme toggle.
+- `Web.config` contains the database connection string and project configuration.
+- `database/` contains the SQL script backup.
+- `resources/` contains static project resources.
+
+## How To Run
+
+1. Open the project in Visual Studio.
+2. Make sure .NET Framework 4.8 is installed.
+3. Make sure SQL Server LocalDB is available.
+4. Run the project using IIS Express.
+5. Open the website in the browser.
+
+The database and required tables are created automatically when the project runs.
+
+## Admin Login
+
+Default admin login:
+
+```text
+Username: admin
+Password: admin
+```
+
+After login, the admin can manage homepage content, notices, projects, gallery, achievements, applicants, members, moderators, and executives.
 
 ## Notes
 
-- This is classic ASP.NET Web Forms, so it targets .NET Framework 4.8.
-- Visual Studio Code can edit the files, but running/debugging usually happens through IIS Express or Visual Studio on Windows.
-- The WebForms pages use `styles.css`, `script.js`, and online image URLs for the UI.
-
-## How it works
-
-- The registration form uses ASP.NET server controls and validators.
-- Submitted registrations are stored in memory only, so they reset when the app restarts.
-- Blog posts are loaded from a predefined C# list in `App_Code/ClubModels.cs`.
-
-## Suggested next step
-
-If you want, the next improvement should be adding a `Default.aspx` redirect or connecting the registration form to a database.
+This project is made for academic purpose. It demonstrates a complete club website with content management, registration, database operations, and admin control.
