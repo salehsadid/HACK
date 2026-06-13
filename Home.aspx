@@ -3,51 +3,44 @@
     <main>
         <section class="hero">
             <div class="hero-media">
-                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&amp;fit=crop&amp;w=1800&amp;q=85" alt="Hardware lab bench with electronics components" />
+                <asp:Image ID="heroImage" runat="server" AlternateText="Hardware lab bench with electronics components" />
             </div>
             <div class="hero-inner">
-                <p class="eyebrow">KUET Hardware Community</p>
-                <h1>Build real hardware, from bare board to working system</h1>
-                <p class="hero-copy">HACK is a student engineering club for embedded systems, robotics, FPGA, IoT, automation, PCB assembly, and competition-ready prototyping</p>
+                <p class="eyebrow"><asp:Literal ID="heroEyebrow" runat="server" /></p>
+                <h1><asp:Literal ID="heroTitle" runat="server" /></h1>
+                <p class="hero-copy"><asp:Literal ID="heroCopy" runat="server" /></p>
                 <div class="hero-actions">
-                    <a class="btn btn-primary" href="Register.aspx">Apply for Membership</a>
-                    <a class="btn btn-ghost" href="#projects">View Projects</a>
+                    <a id="heroPrimaryLink" runat="server" class="btn btn-primary" href="Register.aspx">Apply for Membership</a>
+                    <a id="heroSecondaryLink" runat="server" class="btn btn-ghost" href="#projects">View Projects</a>
                 </div>
                 <div class="metric-row" aria-label="Club statistics">
-                    <div><strong>120+</strong><span>Members</span></div>
-                    <div><strong>35+</strong><span>Workshops</span></div>
-                    <div><strong>8</strong><span>Awards</span></div>
-                    <div><strong>3</strong><span>National Events</span></div>
+                    <asp:Repeater ID="metricsRepeater" runat="server">
+                        <ItemTemplate>
+                            <div>
+                                <strong><%# EncodeText(Eval("Value")) %></strong>
+                                <span><%# EncodeText(Eval("Label")) %></span>
+                            </div>
+                        </ItemTemplate>
+                    </asp:Repeater>
                 </div>
             </div>
         </section>
 
         <section id="about" class="section two-column">
             <div>
-                <p class="eyebrow">What We Do</p>
-                <h2>Hardware engineering with a product mindset.</h2>
+                <p class="eyebrow"><asp:Literal ID="whatEyebrow" runat="server" /></p>
+                <h2><asp:Literal ID="whatTitle" runat="server" /></h2>
             </div>
             <div class="feature-grid">
-                <article>
-                    <span>01</span>
-                    <h3>Embedded Systems</h3>
-                    <p>Firmware, board bring-up, sensors, communication protocols, telemetry, and debugging discipline.</p>
-                </article>
-                <article>
-                    <span>02</span>
-                    <h3>Robotics</h3>
-                    <p>Motor control, chassis design, perception, autonomous navigation, and competition practice.</p>
-                </article>
-                <article>
-                    <span>03</span>
-                    <h3>Digital Design</h3>
-                    <p>FPGA workflows, HDL, timing, signal processing, and hardware acceleration experiments.</p>
-                </article>
-                <article>
-                    <span>04</span>
-                    <h3>Fabrication</h3>
-                    <p>PCB layout, soldering, mechanical prototyping, enclosure review, and reliable assembly habits.</p>
-                </article>
+                <asp:Repeater ID="featuresRepeater" runat="server">
+                    <ItemTemplate>
+                        <article>
+                            <span><%# EncodeText(Eval("Number")) %></span>
+                            <h3><%# EncodeText(Eval("Title")) %></h3>
+                            <p><%# EncodeText(Eval("Description")) %></p>
+                        </article>
+                    </ItemTemplate>
+                </asp:Repeater>
             </div>
         </section>
 

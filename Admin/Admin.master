@@ -43,6 +43,7 @@
 
                 <nav class="sidebar-nav" id="admin-nav" aria-label="Admin navigation">
                     <a class='<%: GetSideNavClass("Dashboard.aspx") %>' href="<%: ResolveUrl("~/Admin/Dashboard.aspx") %>">Dashboard</a>
+                    <a class='<%: GetSideNavClass("HomeContent.aspx") %>' href="<%: ResolveUrl("~/Admin/HomeContent.aspx") %>">Home Page</a>
                     <a class='<%: GetSideNavClass("About.aspx") %>' href="<%: ResolveUrl("~/Admin/About.aspx") %>">About Us</a>
                     <a class='<%: GetSideNavClass("Notices.aspx") %>' href="<%: ResolveUrl("~/Admin/Notices.aspx") %>">Notices</a>
                     <a class='<%: GetSideNavClass("Gallery.aspx") %>' href="<%: ResolveUrl("~/Admin/Gallery.aspx") %>">Gallery</a>

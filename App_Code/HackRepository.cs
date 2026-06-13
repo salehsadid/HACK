@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -186,7 +187,15 @@ IF COL_LENGTH('dbo.ClubContent', 'ImageMimeType') IS NULL
 IF COL_LENGTH('dbo.ClubPersons', 'ImageData') IS NULL
     ALTER TABLE dbo.ClubPersons ADD ImageData VARBINARY(MAX) NULL;
 IF COL_LENGTH('dbo.ClubPersons', 'ImageMimeType') IS NULL
-    ALTER TABLE dbo.ClubPersons ADD ImageMimeType NVARCHAR(50) NULL;";
+    ALTER TABLE dbo.ClubPersons ADD ImageMimeType NVARCHAR(50) NULL;
+
+IF OBJECT_ID('dbo.HomeContent', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.HomeContent (
+        SettingKey NVARCHAR(80) NOT NULL PRIMARY KEY,
+        SettingValue NVARCHAR(MAX) NULL
+    );
+END;";
 
         public static int GetAdminCount()
         {
@@ -398,6 +407,110 @@ WHERE Id = @Id", conn))
         public static void DeleteContent(int id)
         {
             DeleteById("dbo.ClubContent", id);
+        }
+
+        public static HomePageSettings GetHomePageSettings()
+        {
+            EnsureDatabase();
+
+            var settings = DefaultHomePageSettings();
+            var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            using (var conn = CreateConnection())
+            using (var cmd = new SqlCommand("SELECT SettingKey, SettingValue FROM dbo.HomeContent", conn))
+            {
+                conn.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        values[reader["SettingKey"].ToString()] = reader["SettingValue"] as string ?? string.Empty;
+                    }
+                }
+            }
+
+            settings.HeroEyebrow = ReadSetting(values, "HeroEyebrow", settings.HeroEyebrow);
+            settings.HeroTitle = ReadSetting(values, "HeroTitle", settings.HeroTitle);
+            settings.HeroCopy = ReadSetting(values, "HeroCopy", settings.HeroCopy);
+            settings.HeroImageUrl = ReadSetting(values, "HeroImageUrl", settings.HeroImageUrl);
+            settings.HeroPrimaryText = ReadSetting(values, "HeroPrimaryText", settings.HeroPrimaryText);
+            settings.HeroPrimaryUrl = ReadSetting(values, "HeroPrimaryUrl", settings.HeroPrimaryUrl);
+            settings.HeroSecondaryText = ReadSetting(values, "HeroSecondaryText", settings.HeroSecondaryText);
+            settings.HeroSecondaryUrl = ReadSetting(values, "HeroSecondaryUrl", settings.HeroSecondaryUrl);
+            settings.WhatEyebrow = ReadSetting(values, "WhatEyebrow", settings.WhatEyebrow);
+            settings.WhatTitle = ReadSetting(values, "WhatTitle", settings.WhatTitle);
+
+            for (var i = 0; i < settings.Metrics.Count; i++)
+            {
+                var index = i + 1;
+                settings.Metrics[i].Value = ReadSetting(values, "Metric" + index + "Value", settings.Metrics[i].Value);
+                settings.Metrics[i].Label = ReadSetting(values, "Metric" + index + "Label", settings.Metrics[i].Label);
+            }
+
+            for (var i = 0; i < settings.Features.Count; i++)
+            {
+                var index = i + 1;
+                settings.Features[i].Number = ReadSetting(values, "Feature" + index + "Number", settings.Features[i].Number);
+                settings.Features[i].Title = ReadSetting(values, "Feature" + index + "Title", settings.Features[i].Title);
+                settings.Features[i].Description = ReadSetting(values, "Feature" + index + "Description", settings.Features[i].Description);
+            }
+
+            return settings;
+        }
+
+        public static void SaveHomePageSettings(HomePageSettings settings)
+        {
+            EnsureDatabase();
+
+            var normalized = NormalizeHomePageSettings(settings);
+            var values = new Dictionary<string, string>
+            {
+                { "HeroEyebrow", normalized.HeroEyebrow },
+                { "HeroTitle", normalized.HeroTitle },
+                { "HeroCopy", normalized.HeroCopy },
+                { "HeroImageUrl", normalized.HeroImageUrl },
+                { "HeroPrimaryText", normalized.HeroPrimaryText },
+                { "HeroPrimaryUrl", normalized.HeroPrimaryUrl },
+                { "HeroSecondaryText", normalized.HeroSecondaryText },
+                { "HeroSecondaryUrl", normalized.HeroSecondaryUrl },
+                { "WhatEyebrow", normalized.WhatEyebrow },
+                { "WhatTitle", normalized.WhatTitle }
+            };
+
+            for (var i = 0; i < normalized.Metrics.Count; i++)
+            {
+                var index = i + 1;
+                values["Metric" + index + "Value"] = normalized.Metrics[i].Value;
+                values["Metric" + index + "Label"] = normalized.Metrics[i].Label;
+            }
+
+            for (var i = 0; i < normalized.Features.Count; i++)
+            {
+                var index = i + 1;
+                values["Feature" + index + "Number"] = normalized.Features[i].Number;
+                values["Feature" + index + "Title"] = normalized.Features[i].Title;
+                values["Feature" + index + "Description"] = normalized.Features[i].Description;
+            }
+
+            using (var conn = CreateConnection())
+            using (var cmd = new SqlCommand(@"
+MERGE dbo.HomeContent AS target
+USING (SELECT @SettingKey AS SettingKey, @SettingValue AS SettingValue) AS source
+ON target.SettingKey = source.SettingKey
+WHEN MATCHED THEN UPDATE SET SettingValue = source.SettingValue
+WHEN NOT MATCHED THEN INSERT (SettingKey, SettingValue) VALUES (source.SettingKey, source.SettingValue);", conn))
+            {
+                cmd.Parameters.Add("@SettingKey", SqlDbType.NVarChar, 80);
+                cmd.Parameters.Add("@SettingValue", SqlDbType.NVarChar, -1);
+                conn.Open();
+
+                foreach (var pair in values)
+                {
+                    cmd.Parameters["@SettingKey"].Value = pair.Key;
+                    cmd.Parameters["@SettingValue"].Value = (object)pair.Value ?? DBNull.Value;
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         // ── About text ────────────────────────────────────────
@@ -616,6 +729,74 @@ WHERE Id = @Id", conn))
         {
             value = NullSafe(value);
             return value.Length == 0 ? (object)DBNull.Value : value;
+        }
+
+        private static HomePageSettings DefaultHomePageSettings()
+        {
+            return new HomePageSettings
+            {
+                HeroEyebrow = "KUET Hardware Community",
+                HeroTitle = "Build real hardware, from bare board to working system",
+                HeroCopy = "HACK is a student engineering club for embedded systems, robotics, FPGA, IoT, automation, PCB assembly, and competition-ready prototyping",
+                HeroImageUrl = "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=85",
+                HeroPrimaryText = "Apply for Membership",
+                HeroPrimaryUrl = "Register.aspx",
+                HeroSecondaryText = "View Projects",
+                HeroSecondaryUrl = "#projects",
+                Metrics = new List<HomeMetric>
+                {
+                    new HomeMetric { Value = "120+", Label = "Members" },
+                    new HomeMetric { Value = "35+", Label = "Workshops" },
+                    new HomeMetric { Value = "8", Label = "Awards" },
+                    new HomeMetric { Value = "3", Label = "National Events" }
+                },
+                WhatEyebrow = "What We Do",
+                WhatTitle = "Hardware engineering with a product mindset.",
+                Features = new List<HomeFeature>
+                {
+                    new HomeFeature { Number = "01", Title = "Embedded Systems", Description = "Firmware, board bring-up, sensors, communication protocols, telemetry, and debugging discipline." },
+                    new HomeFeature { Number = "02", Title = "Robotics", Description = "Motor control, chassis design, perception, autonomous navigation, and competition practice." },
+                    new HomeFeature { Number = "03", Title = "Digital Design", Description = "FPGA workflows, HDL, timing, signal processing, and hardware acceleration experiments." },
+                    new HomeFeature { Number = "04", Title = "Fabrication", Description = "PCB layout, soldering, mechanical prototyping, enclosure review, and reliable assembly habits." }
+                }
+            };
+        }
+
+        private static HomePageSettings NormalizeHomePageSettings(HomePageSettings settings)
+        {
+            var defaults = DefaultHomePageSettings();
+            settings = settings ?? defaults;
+            settings.Metrics = settings.Metrics ?? new List<HomeMetric>();
+            settings.Features = settings.Features ?? new List<HomeFeature>();
+
+            while (settings.Metrics.Count < defaults.Metrics.Count)
+            {
+                var defaultMetric = defaults.Metrics[settings.Metrics.Count];
+                settings.Metrics.Add(new HomeMetric
+                {
+                    Value = defaultMetric.Value,
+                    Label = defaultMetric.Label
+                });
+            }
+
+            while (settings.Features.Count < defaults.Features.Count)
+            {
+                var defaultFeature = defaults.Features[settings.Features.Count];
+                settings.Features.Add(new HomeFeature
+                {
+                    Number = defaultFeature.Number,
+                    Title = defaultFeature.Title,
+                    Description = defaultFeature.Description
+                });
+            }
+
+            return settings;
+        }
+
+        private static string ReadSetting(Dictionary<string, string> values, string key, string fallback)
+        {
+            string value;
+            return values.TryGetValue(key, out value) ? value : fallback;
         }
     }
 }

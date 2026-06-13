@@ -49,6 +49,35 @@ namespace HACK.WebForms
         public bool IsActive { get; set; }
     }
 
+    public class HomeFeature
+    {
+        public string Number { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class HomeMetric
+    {
+        public string Value { get; set; }
+        public string Label { get; set; }
+    }
+
+    public class HomePageSettings
+    {
+        public string HeroEyebrow { get; set; }
+        public string HeroTitle { get; set; }
+        public string HeroCopy { get; set; }
+        public string HeroImageUrl { get; set; }
+        public string HeroPrimaryText { get; set; }
+        public string HeroPrimaryUrl { get; set; }
+        public string HeroSecondaryText { get; set; }
+        public string HeroSecondaryUrl { get; set; }
+        public List<HomeMetric> Metrics { get; set; }
+        public string WhatEyebrow { get; set; }
+        public string WhatTitle { get; set; }
+        public List<HomeFeature> Features { get; set; }
+    }
+
     public class BlogPost
     {
         public string Category { get; set; }
