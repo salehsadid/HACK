@@ -84,7 +84,7 @@
                 <asp:Repeater ID="achievementsRepeater" runat="server">
                     <ItemTemplate>
                         <article class="content-card">
-                            <img src='<%# ContentImgSrc(Eval("Id")) %>' alt='<%# Eval("Title") %>' />
+                            <img src='<%# ContentImgSrc(Eval("Id")) %>' alt='<%# Eval("Title") %>' onerror="this.style.display='none'" />
                             <div>
                                 <span class="pill"><%# Eval("Meta") %></span>
                                 <h3><%# Eval("Title") %></h3>
@@ -105,7 +105,7 @@
                 <asp:Repeater ID="projectsRepeater" runat="server">
                     <ItemTemplate>
                         <article class="content-card">
-                            <img src='<%# ContentImgSrc(Eval("Id")) %>' alt='<%# Eval("Title") %>' />
+                            <img src='<%# ContentImgSrc(Eval("Id")) %>' alt='<%# Eval("Title") %>' onerror="this.style.display='none'" />
                             <div>
                                 <span class="pill"><%# Eval("Meta") %></span>
                                 <h3><%# Eval("Title") %></h3>
@@ -126,7 +126,7 @@
                 <asp:Repeater ID="galleryRepeater" runat="server">
                     <ItemTemplate>
                         <figure>
-                            <img src='<%# ContentImgSrc(Eval("Id")) %>' alt='<%# Eval("Title") %>' />
+                            <img src='<%# ContentImgSrc(Eval("Id")) %>' alt='<%# Eval("Title") %>' onerror="this.style.display='none'" />
                             <figcaption>
                                 <span class="pill"><%# Eval("Meta") %></span>
                                 <strong><%# Eval("Title") %></strong>

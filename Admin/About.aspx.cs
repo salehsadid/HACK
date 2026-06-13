@@ -64,14 +64,17 @@ public partial class AdminAbout : Page
     {
         var id = (int)modGrid.DataKeys[e.RowIndex].Value;
         var fu = (FileUpload)modGrid.Rows[e.RowIndex].FindControl("imgUpload");
+        var removeImage = (CheckBox)modGrid.Rows[e.RowIndex].FindControl("removeImage");
+        var hasNewImage = fu != null && fu.HasFile;
 
         HACK.WebForms.HackRepository.UpdateClubPerson(id, new HACK.WebForms.ClubPerson
         {
             PersonType      = "moderator",
             ClubDesignation = ReadValue(e.NewValues["ClubDesignation"]),
             Name            = ReadValue(e.NewValues["Name"]),
-            ImageData       = fu != null && fu.HasFile ? fu.FileBytes : null,
-            ImageMimeType   = fu != null && fu.HasFile ? fu.PostedFile.ContentType : null,
+            ImageData       = hasNewImage ? fu.FileBytes : null,
+            ImageMimeType   = hasNewImage ? fu.PostedFile.ContentType : null,
+            RemoveImage     = !hasNewImage && removeImage != null && removeImage.Checked,
             Info            = ReadValue(e.NewValues["Info"]),
             DisplayOrder    = ToInt(ReadValue(e.NewValues["DisplayOrder"]), 0),
             IsActive        = ToBool(e.NewValues["IsActive"])
@@ -124,14 +127,17 @@ public partial class AdminAbout : Page
     {
         var id = (int)exGrid.DataKeys[e.RowIndex].Value;
         var fu = (FileUpload)exGrid.Rows[e.RowIndex].FindControl("imgUpload");
+        var removeImage = (CheckBox)exGrid.Rows[e.RowIndex].FindControl("removeImage");
+        var hasNewImage = fu != null && fu.HasFile;
 
         HACK.WebForms.HackRepository.UpdateClubPerson(id, new HACK.WebForms.ClubPerson
         {
             PersonType      = "executive",
             ClubDesignation = ReadValue(e.NewValues["ClubDesignation"]),
             Name            = ReadValue(e.NewValues["Name"]),
-            ImageData       = fu != null && fu.HasFile ? fu.FileBytes : null,
-            ImageMimeType   = fu != null && fu.HasFile ? fu.PostedFile.ContentType : null,
+            ImageData       = hasNewImage ? fu.FileBytes : null,
+            ImageMimeType   = hasNewImage ? fu.PostedFile.ContentType : null,
+            RemoveImage     = !hasNewImage && removeImage != null && removeImage.Checked,
             Info            = ReadValue(e.NewValues["Info"]),
             DisplayOrder    = ToInt(ReadValue(e.NewValues["DisplayOrder"]), 0),
             IsActive        = ToBool(e.NewValues["IsActive"])

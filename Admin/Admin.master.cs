@@ -6,6 +6,8 @@ public partial class AdminMaster : MasterPage
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        Page.MaintainScrollPositionOnPostBack = true;
+
         if (Session["AdminUser"] == null)
         {
             Response.Redirect("~/Admin/Login.aspx");

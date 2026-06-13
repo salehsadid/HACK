@@ -17,6 +17,7 @@ namespace HACK.WebForms
         public string Name { get; set; }
         public byte[] ImageData { get; set; }
         public string ImageMimeType { get; set; }
+        public bool RemoveImage { get; set; }
         public string Info { get; set; }
         public int DisplayOrder { get; set; }
         public bool IsActive { get; set; }
@@ -42,6 +43,7 @@ namespace HACK.WebForms
         public string Body { get; set; }
         public byte[] ImageData { get; set; }
         public string ImageMimeType { get; set; }
+        public bool RemoveImage { get; set; }
         public string Meta { get; set; }
         public int DisplayOrder { get; set; }
         public bool IsActive { get; set; }

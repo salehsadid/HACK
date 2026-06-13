@@ -14,7 +14,7 @@ public class ImageHandler : IHttpHandler
 
         if (!int.TryParse(context.Request.QueryString["id"], out id) || id <= 0)
         {
-            Redirect(context, Placeholder());
+            WriteMissingImage(context, src);
             return;
         }
 
@@ -45,15 +45,31 @@ public class ImageHandler : IHttpHandler
         }
         catch
         {
-            // fall through to placeholder on any DB error
+            // fall through to the missing-image behavior on any DB error
         }
 
-        Redirect(context, Placeholder());
+        WriteMissingImage(context, src);
     }
 
-    private static string Placeholder()
+    private static void WriteMissingImage(HttpContext context, string src)
     {
-        return "https://ui-avatars.com/api/?name=HACK&background=0f766e&color=fff&bold=true&size=256";
+        if (src == "person")
+        {
+            context.Response.StatusCode = 200;
+            context.Response.ContentType = "image/svg+xml";
+            context.Response.Cache.SetCacheability(HttpCacheability.Public);
+            context.Response.Cache.SetMaxAge(TimeSpan.FromDays(7));
+            context.Response.Write(PersonPlaceholderSvg());
+            return;
+        }
+
+        context.Response.StatusCode = 404;
+        context.Response.End();
+    }
+
+    private static string PersonPlaceholderSvg()
+    {
+        return @"<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 256 256"" role=""img"" aria-label=""Person""><rect width=""256"" height=""256"" rx=""128"" fill=""#e5e7eb""/><circle cx=""128"" cy=""92"" r=""44"" fill=""#64748b""/><path fill=""#64748b"" d=""M48 222c8-45 41-74 80-74s72 29 80 74z""/></svg>";
     }
 
     private static void Redirect(HttpContext context, string url)

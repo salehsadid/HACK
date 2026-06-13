@@ -382,8 +382,9 @@ VALUES (@ContentType, @Title, @Subtitle, @Body, @ImageData, @ImageMimeType, @Met
             using (var conn = CreateConnection())
             using (var cmd = new SqlCommand(@"UPDATE dbo.ClubContent
 SET ContentType = @ContentType, Title = @Title, Subtitle = @Subtitle, Body = @Body,
-    ImageData     = CASE WHEN @ImageData IS NULL THEN ImageData ELSE @ImageData END,
-    ImageMimeType = CASE WHEN @ImageData IS NULL THEN ImageMimeType ELSE @ImageMimeType END,
+    ImageData     = CASE WHEN @RemoveImage = 1 THEN NULL WHEN @ImageData IS NULL THEN ImageData ELSE @ImageData END,
+    ImageMimeType = CASE WHEN @RemoveImage = 1 THEN NULL WHEN @ImageData IS NULL THEN ImageMimeType ELSE @ImageMimeType END,
+    ImageUrl      = CASE WHEN @RemoveImage = 1 THEN NULL ELSE ImageUrl END,
     Meta = @Meta, DisplayOrder = @DisplayOrder, IsActive = @IsActive
 WHERE Id = @Id", conn))
             {
@@ -487,8 +488,9 @@ VALUES (@PersonType, @ClubDesignation, @Name, @ImageData, @ImageMimeType, @Info,
             using (var conn = CreateConnection())
             using (var cmd = new SqlCommand(@"UPDATE dbo.ClubPersons
 SET PersonType = @PersonType, ClubDesignation = @ClubDesignation, Name = @Name,
-    ImageData     = CASE WHEN @ImageData IS NULL THEN ImageData ELSE @ImageData END,
-    ImageMimeType = CASE WHEN @ImageData IS NULL THEN ImageMimeType ELSE @ImageMimeType END,
+    ImageData     = CASE WHEN @RemoveImage = 1 THEN NULL WHEN @ImageData IS NULL THEN ImageData ELSE @ImageData END,
+    ImageMimeType = CASE WHEN @RemoveImage = 1 THEN NULL WHEN @ImageData IS NULL THEN ImageMimeType ELSE @ImageMimeType END,
+    PicUrl        = CASE WHEN @RemoveImage = 1 THEN NULL ELSE PicUrl END,
     Info = @Info, DisplayOrder = @DisplayOrder, IsActive = @IsActive
 WHERE Id = @Id", conn))
             {
@@ -512,6 +514,7 @@ WHERE Id = @Id", conn))
             var imgParam = cmd.Parameters.Add("@ImageData", SqlDbType.VarBinary, -1);
             imgParam.Value = person.ImageData != null ? (object)person.ImageData : DBNull.Value;
             cmd.Parameters.Add("@ImageMimeType",   SqlDbType.NVarChar, 50).Value  = DbValue(person.ImageMimeType);
+            cmd.Parameters.Add("@RemoveImage",     SqlDbType.Bit).Value            = person.RemoveImage;
             cmd.Parameters.Add("@Info",            SqlDbType.NVarChar, 300).Value = DbValue(person.Info);
             cmd.Parameters.Add("@DisplayOrder",    SqlDbType.Int).Value            = person.DisplayOrder;
             cmd.Parameters.Add("@IsActive",        SqlDbType.Bit).Value            = person.IsActive;
@@ -587,6 +590,7 @@ WHERE Id = @Id", conn))
             var imgParam = cmd.Parameters.Add("@ImageData", SqlDbType.VarBinary, -1);
             imgParam.Value = item.ImageData != null ? (object)item.ImageData : DBNull.Value;
             cmd.Parameters.Add("@ImageMimeType", SqlDbType.NVarChar, 50).Value  = DbValue(item.ImageMimeType);
+            cmd.Parameters.Add("@RemoveImage",   SqlDbType.Bit).Value            = item.RemoveImage;
             cmd.Parameters.Add("@Meta",          SqlDbType.NVarChar, 120).Value = DbValue(item.Meta);
             cmd.Parameters.Add("@DisplayOrder",  SqlDbType.Int).Value            = item.DisplayOrder;
             cmd.Parameters.Add("@IsActive",      SqlDbType.Bit).Value            = item.IsActive;

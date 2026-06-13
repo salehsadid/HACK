@@ -60,6 +60,7 @@
                     <EditItemTemplate>
                         <img src='<%# PersonImgSrc(Eval("Id")) %>' width="40" height="40" style="object-fit:cover;border-radius:50%;display:block;margin-bottom:4px;" onerror="this.style.display='none'" />
                         <asp:FileUpload ID="imgUpload" runat="server" accept="image/*" />
+                        <asp:CheckBox ID="removeImage" runat="server" Text="Remove current image" />
                     </EditItemTemplate>
                 </asp:TemplateField>
                 <asp:BoundField DataField="ClubDesignation" HeaderText="Club Designation" />
@@ -106,6 +107,7 @@
                     <EditItemTemplate>
                         <img src='<%# PersonImgSrc(Eval("Id")) %>' width="40" height="40" style="object-fit:cover;border-radius:50%;display:block;margin-bottom:4px;" onerror="this.style.display='none'" />
                         <asp:FileUpload ID="imgUpload" runat="server" accept="image/*" />
+                        <asp:CheckBox ID="removeImage" runat="server" Text="Remove current image" />
                     </EditItemTemplate>
                 </asp:TemplateField>
                 <asp:BoundField DataField="ClubDesignation" HeaderText="Club Designation" />

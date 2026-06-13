@@ -57,6 +57,8 @@ public partial class AdminNotices : Page
     {
         var id = (int)contentGrid.DataKeys[e.RowIndex].Value;
         var fu = (FileUpload)contentGrid.Rows[e.RowIndex].FindControl("imgUpload");
+        var removeImage = (CheckBox)contentGrid.Rows[e.RowIndex].FindControl("removeImage");
+        var hasNewImage = fu != null && fu.HasFile;
 
         HACK.WebForms.HackRepository.UpdateContent(id, new HACK.WebForms.ClubContentItem
         {
@@ -64,8 +66,9 @@ public partial class AdminNotices : Page
             Title         = ReadValue(e.NewValues["Title"]),
             Subtitle      = string.Empty,
             Body          = ReadValue(e.NewValues["Body"]),
-            ImageData     = fu != null && fu.HasFile ? fu.FileBytes : null,
-            ImageMimeType = fu != null && fu.HasFile ? fu.PostedFile.ContentType : null,
+            ImageData     = hasNewImage ? fu.FileBytes : null,
+            ImageMimeType = hasNewImage ? fu.PostedFile.ContentType : null,
+            RemoveImage   = !hasNewImage && removeImage != null && removeImage.Checked,
             Meta          = ReadValue(e.NewValues["Meta"]),
             DisplayOrder  = ToInt(ReadValue(e.NewValues["DisplayOrder"]), 0),
             IsActive      = ToBool(e.NewValues["IsActive"])
